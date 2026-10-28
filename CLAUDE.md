@@ -76,7 +76,7 @@ Contexts: `Identity` (exists), `Pantry`, `Cooking`, `Groceries` (added step by s
 
 ## Android app — `android/`
 
-A WebView shell of the production site (added in a later step). Built on the Mac, not in Docker: `make android-sdk` once, then `make apk`, `make apk-install`, `make android-test`. The app URL comes from the git-ignored `android/local.properties` (`appUrl`) and the build fails without it; `android/keystore.*` is never committed (updates need the same key).
+A WebView shell of the production site: Kotlin, no Compose, no widget, `cloud.duprat.muhmeal`, the only logic worth a test is `Hosts` (in-app vs browser). Built on the Mac, not in Docker: `make android-sdk` once, then `make apk`, `make apk-install`, `make android-test` (needs JDK 17 to 26 on the PATH). The app URL comes from the git-ignored `android/local.properties` (`appUrl`) and the build fails without it; `android/keystore.*` is never committed (updates need the same key; `make apk` creates it once, in the main checkout only). Setup and limits: `docs/apps.md`, rules: `docs/business/apps.md`.
 
 ## Testing expectations
 
