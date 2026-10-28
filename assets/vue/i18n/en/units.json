@@ -1,0 +1,11 @@
+{
+    "piece": { "one": "piece", "other": "pieces" },
+    "bottle": { "one": "bottle", "other": "bottles" },
+    "jar": { "one": "jar", "other": "jars" },
+    "pack": { "one": "pack", "other": "packs" },
+    "bag": { "one": "bag", "other": "bags" },
+    "box": { "one": "box", "other": "boxes" },
+    "carton": { "one": "carton", "other": "cartons" },
+    "can": { "one": "can", "other": "cans" },
+    "tub": { "one": "tub", "other": "tubs" }
+}

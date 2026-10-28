@@ -13,7 +13,7 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/{path}', name: 'app', requirements: ['path' => '(?!api/|build|_|login|logout|robots\.txt).*'], defaults: ['path' => ''], methods: ['GET'], priority: -100)]
 final class AppShellController extends AbstractController
 {
-    private const array ALWAYS = [];
+    private const array ALWAYS = ['/api/ingredients'];
 
     public function __construct(
         private readonly ApiPreload $preload,

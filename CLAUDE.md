@@ -45,7 +45,7 @@ make qa              # everything above, the gate before a commit
 | `Infrastructure/` | Doctrine repositories and read ports, security adapters (mossyleaf accounts OIDC client) | Domain, Application |
 | `Presentation/` | `Api/` JSON controllers + payload DTOs, `Web/` Twig shells, auth pages and security listeners | Application, Domain |
 
-Contexts: `Identity` (exists), `Pantry`, `Cooking`, `Groceries` (added step by step; `Shared` holds `Day`, `OptionalText` and the exception bases).
+Contexts: `Identity` and `Pantry` (exist), `Cooking`, `Groceries` (added step by step; `Shared` holds `Day`, `OptionalText` and the exception bases).
 
 - Doctrine mapping = attributes on Domain entities. Dates without time are `date_immutable` built through `Domain\Shared\Day` — never `new \DateTimeImmutable()` for a day. **The client sends the day it means** (its local date), so the server has no time zone.
 - Invariants throw `DomainException` subclasses (`<Context>/Exception/<Violation>.php`) → 422 `problem+json` (404 for `NotFound`) through `DomainExceptionListener`, message translated from `translations/exceptions+intl-icu.<locale>.yaml`.

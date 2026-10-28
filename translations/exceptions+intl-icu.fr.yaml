@@ -1,7 +1,12 @@
 shared:
-    not_found: '{subject, select, user {Cette personne n’existe} other {Cet élément n’existe}} plus.'
+    not_found: '{subject, select, user {Cette personne n’existe} ingredient {Cet ingrédient n’existe} other {Cet élément n’existe}} plus.'
     invalid_day: '« {day} » n’est pas une date valide.'
 user:
     invalid_email: '« {email} » n’est pas une adresse e-mail valide.'
     empty_display_name: 'Dites-nous comment vous appeler.'
     email_taken: 'Un compte utilise déjà {email}. Connectez-vous plutôt.'
+ingredient:
+    empty_name: 'Donnez un nom à l’ingrédient.'
+    name_too_long: 'Un nom d’ingrédient compte au plus {max} caractères.'
+    name_taken: 'Il existe déjà un ingrédient nommé « {name} ».'
+    quantity_out_of_range: 'Une quantité va de 0 à {max} unités.'

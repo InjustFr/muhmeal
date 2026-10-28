@@ -1,0 +1,5 @@
+name.required: 'Enter a name.'
+name.too_long: 'This name is too long.'
+quantity.range: 'Choose a quantity between 0 and 999 units.'
+adjustment.range: 'Change the stock by at most 999 units.'
+adjustment.zero: 'Choose a change other than zero.'

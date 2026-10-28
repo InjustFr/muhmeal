@@ -1,0 +1,5 @@
+name.required: 'Saisissez un nom.'
+name.too_long: 'Ce nom est trop long.'
+quantity.range: 'Choisissez une quantité entre 0 et 999 unités.'
+adjustment.range: 'Modifiez le stock de 999 unités au plus.'
+adjustment.zero: 'Choisissez une variation autre que zéro.'

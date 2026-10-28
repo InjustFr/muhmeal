@@ -1,6 +1,59 @@
 {
     "empty": {
         "title": "The shelves are bare",
-        "hint": "Everything in your fridge, freezer and pantry will be listed here."
+        "hint": "Everything in your fridge, freezer and pantry will be listed here. Type a name above to add the first ingredient."
+    },
+    "noMatch": {
+        "title": "Nothing here",
+        "hint": "No ingredient matches. Try another place or another name."
+    },
+    "search": {
+        "label": "Search or add an ingredient",
+        "placeholder": "Search or add an ingredient",
+        "add": "Add “{name}”"
+    },
+    "location": {
+        "label": "Place",
+        "all": "All",
+        "fridge": "Fridge",
+        "freezer": "Freezer",
+        "pantry": "Pantry"
+    },
+    "badge": {
+        "out": "Out",
+        "low": "Low"
+    },
+    "row": {
+        "increase": "One more {name}",
+        "decrease": "One less {name}",
+        "setStock": "Set the stock of {name}",
+        "edit": "edit",
+        "group": "Stock of {name}"
+    },
+    "stock": {
+        "title": "How much {name}?",
+        "whole": "Whole units",
+        "fraction": "And a bit more",
+        "more": "More",
+        "less": "Less",
+        "save": "Set stock"
+    },
+    "sheet": {
+        "createTitle": "New ingredient",
+        "editTitle": "Edit ingredient",
+        "name": "Name",
+        "location": "Where it lives",
+        "unit": "Counted in",
+        "manual": "Track by hand",
+        "manualHint": "Cooking won't deduct it.",
+        "lowAt": "Running low at",
+        "more": "More",
+        "less": "Less",
+        "save": "Save",
+        "saveAndAdd": "Save & add another",
+        "added": "{name} added",
+        "delete": "Delete",
+        "deleteTitle": "Delete {name}?",
+        "deleteMessage": "The ingredient and its stock are removed. This cannot be undone."
     }
 }

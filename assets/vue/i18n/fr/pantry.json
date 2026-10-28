@@ -1,6 +1,59 @@
 {
     "empty": {
         "title": "Les étagères sont vides",
-        "hint": "Tout ce qu’il y a dans le frigo, le congélateur et le placard sera listé ici."
+        "hint": "Tout ce qu’il y a dans le frigo, le congélateur et le placard sera listé ici. Tapez un nom ci-dessus pour ajouter le premier ingrédient."
+    },
+    "noMatch": {
+        "title": "Rien ici",
+        "hint": "Aucun ingrédient ne correspond. Essayez un autre endroit ou un autre nom."
+    },
+    "search": {
+        "label": "Chercher ou ajouter un ingrédient",
+        "placeholder": "Chercher ou ajouter un ingrédient",
+        "add": "Ajouter « {name} »"
+    },
+    "location": {
+        "label": "Endroit",
+        "all": "Tout",
+        "fridge": "Frigo",
+        "freezer": "Congélo",
+        "pantry": "Placard"
+    },
+    "badge": {
+        "out": "Fini",
+        "low": "Bientôt fini"
+    },
+    "row": {
+        "increase": "Un de plus : {name}",
+        "decrease": "Un de moins : {name}",
+        "setStock": "Régler le stock : {name}",
+        "edit": "modifier",
+        "group": "Stock : {name}"
+    },
+    "stock": {
+        "title": "Combien de {name} ?",
+        "whole": "Unités entières",
+        "fraction": "Et un peu plus",
+        "more": "Plus",
+        "less": "Moins",
+        "save": "Régler le stock"
+    },
+    "sheet": {
+        "createTitle": "Nouvel ingrédient",
+        "editTitle": "Modifier l’ingrédient",
+        "name": "Nom",
+        "location": "Où il se range",
+        "unit": "Compté en",
+        "manual": "Suivi à la main",
+        "manualHint": "La cuisine ne le décompte pas.",
+        "lowAt": "Bientôt fini à",
+        "more": "Plus",
+        "less": "Moins",
+        "save": "Enregistrer",
+        "saveAndAdd": "Enregistrer et en ajouter un autre",
+        "added": "{name} ajouté",
+        "delete": "Supprimer",
+        "deleteTitle": "Supprimer {name} ?",
+        "deleteMessage": "L’ingrédient et son stock sont supprimés. Cette action est définitive."
     }
 }

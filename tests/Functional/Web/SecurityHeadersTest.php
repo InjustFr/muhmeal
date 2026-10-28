@@ -29,6 +29,7 @@ final class SecurityHeadersTest extends WebTestCase
 
         $client->jsonRequest('GET', '/api/ingredients');
 
+        self::assertResponseStatusCodeSame(401);
         self::assertSecurityHeaders();
     }
 

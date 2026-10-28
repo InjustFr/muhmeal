@@ -40,7 +40,18 @@ final class ShellTest extends WebTestCase
 
         self::assertResponseIsSuccessful();
         self::assertCount(1, $crawler->filter('#app'));
-        self::assertSame([], Json::decode($crawler->filter('#app-preload')->text()));
+        self::assertSame(['/api/ingredients' => []], Json::decode($crawler->filter('#app-preload')->text()));
+    }
+
+    public function testTheIngredientsTravelWithEveryPage(): void
+    {
+        $client = self::signedInClient();
+        $client->jsonRequest('POST', '/api/ingredients', ['name' => 'Milk', 'location' => 'fridge', 'unit' => 'carton']);
+
+        $crawler = $client->request('GET', '/recipes');
+
+        $preload = Json::decode($crawler->filter('#app-preload')->text());
+        self::assertSame(['Milk'], array_column(Json::array($preload, '/api/ingredients'), 'name'));
     }
 
     /** @return iterable<array{string}> */

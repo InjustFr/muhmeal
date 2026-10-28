@@ -1,7 +1,12 @@
 shared:
-    not_found: 'This {subject, select, user {person} other {item}} no longer exists.'
+    not_found: 'This {subject, select, user {person} ingredient {ingredient} other {item}} no longer exists.'
     invalid_day: '“{day}” is not a valid date.'
 user:
     invalid_email: '“{email}” is not a valid email address.'
     empty_display_name: 'Tell us what to call you.'
     email_taken: 'An account already uses {email}. Sign in instead.'
+ingredient:
+    empty_name: 'Give the ingredient a name.'
+    name_too_long: 'An ingredient name has at most {max} characters.'
+    name_taken: 'There is already an ingredient called “{name}”.'
+    quantity_out_of_range: 'A quantity goes from 0 to {max} units.'

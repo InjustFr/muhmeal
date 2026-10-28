@@ -1,7 +1,7 @@
 <script setup>
 import { computed } from 'vue';
 import { PhCaretDown, PhCheck } from '@phosphor-icons/vue';
-import { SelectContent, SelectItem, SelectItemIndicator, SelectItemText, SelectPortal, SelectRoot, SelectTrigger, SelectValue, SelectViewport } from 'reka-ui';
+import { SelectContent, SelectItem, SelectItemIndicator, SelectItemText, SelectPortal, SelectRoot, SelectTrigger, SelectValue } from 'reka-ui';
 import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
@@ -35,12 +35,10 @@ const selected = computed({
         </SelectTrigger>
         <SelectPortal>
             <SelectContent class="popover select__content" position="popper" :side-offset="4">
-                <SelectViewport>
-                    <SelectItem v-for="item in items" :key="item.itemValue" :value="item.itemValue" class="popover__item">
-                        <SelectItemText>{{ item.label }}</SelectItemText>
-                        <SelectItemIndicator class="popover__hint"><PhCheck size="1rem" weight="bold" aria-hidden="true" /></SelectItemIndicator>
-                    </SelectItem>
-                </SelectViewport>
+                <SelectItem v-for="item in items" :key="item.itemValue" :value="item.itemValue" class="popover__item">
+                    <SelectItemText>{{ item.label }}</SelectItemText>
+                    <SelectItemIndicator class="popover__hint"><PhCheck size="1rem" weight="bold" aria-hidden="true" /></SelectItemIndicator>
+                </SelectItem>
             </SelectContent>
         </SelectPortal>
     </SelectRoot>
@@ -54,5 +52,5 @@ const selected = computed({
 </style>
 
 <style>
-.select__content { min-width: var(--reka-select-trigger-width); max-height: var(--reka-select-content-available-height); overflow: hidden; }
+.select__content { min-width: var(--reka-select-trigger-width); max-height: var(--reka-select-content-available-height); overflow-y: auto; }
 </style>
