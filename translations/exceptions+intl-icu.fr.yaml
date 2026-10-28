@@ -1,0 +1,7 @@
+shared:
+    not_found: '{subject, select, user {Cette personne n’existe} other {Cet élément n’existe}} plus.'
+    invalid_day: '« {day} » n’est pas une date valide.'
+user:
+    invalid_email: '« {email} » n’est pas une adresse e-mail valide.'
+    empty_display_name: 'Dites-nous comment vous appeler.'
+    email_taken: 'Un compte utilise déjà {email}. Connectez-vous plutôt.'

@@ -1,0 +1,15 @@
+{
+    "confirm": {
+        "message": "This cannot be undone.",
+        "action": "Delete"
+    },
+    "date": {
+        "open": "Open the calendar",
+        "clear": "Clear the date",
+        "previousMonth": "Previous month",
+        "nextMonth": "Next month"
+    },
+    "toast": {
+        "label": "Notifications"
+    }
+}

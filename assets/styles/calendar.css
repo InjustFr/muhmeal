@@ -1,0 +1,23 @@
+.calendar__header { display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--space-2); }
+.calendar__heading { font-family: var(--font-display); font-weight: 600; text-transform: capitalize; }
+.calendar__nav { display: inline-flex; align-items: center; justify-content: center; width: var(--target); height: var(--target); border: none; border-radius: var(--radius-pill); background: none; color: var(--color-muted); cursor: pointer; }
+.calendar__nav:hover { color: var(--color-text); background: var(--color-hover); }
+.calendar__grid { border-collapse: collapse; }
+.calendar__head-cell { width: var(--target); padding-bottom: var(--space-1); color: var(--color-subtle); font-size: var(--font-size-xs); font-weight: 700; }
+.calendar__cell { padding: 0.0625rem; text-align: center; }
+.calendar__day { display: inline-flex; align-items: center; justify-content: center; width: var(--target); height: var(--target); border-radius: var(--radius-pill); font-size: var(--font-size-md); font-weight: 600; font-variant-numeric: tabular-nums; cursor: pointer; outline: none; transition: background var(--transition), color var(--transition); }
+.calendar__day:hover { background: var(--color-hover); }
+.calendar__day:focus-visible { box-shadow: var(--focus-ring); }
+.calendar__day[data-today] { color: var(--color-accent-strong); font-weight: 800; }
+.calendar__day[data-outside-view] { color: var(--color-subtle); }
+.calendar__day[data-selected] { background: var(--color-accent); color: var(--color-on-accent); font-weight: 800; }
+.date-field { display: flex; align-items: center; gap: 0.0625rem; padding-block: var(--space-1); padding-right: var(--space-1); font-variant-numeric: tabular-nums; }
+.date-field__segment { padding: 0 0.0625rem; border-radius: var(--radius-sm); outline: none; }
+.date-field__segment:focus { background: var(--color-accent-soft); color: var(--color-accent-strong); }
+.date-field__segment[data-placeholder] { color: var(--color-subtle); }
+.date-field__literal { padding: 0 0.125rem; color: var(--color-subtle); }
+.date-field__trigger { display: inline-flex; align-items: center; justify-content: center; width: var(--target); height: var(--target); margin-left: auto; border: none; border-radius: var(--radius-pill); background: none; color: var(--color-muted); cursor: pointer; }
+.date-field__trigger:hover { color: var(--color-text); background: var(--color-hover); }
+.date-field__clear { display: inline-flex; align-items: center; justify-content: center; width: var(--target); height: var(--target); border: none; background: none; color: var(--color-subtle); cursor: pointer; border-radius: var(--radius-pill); }
+.date-field__clear:hover { color: var(--color-text); }
+.date-field__content { padding: var(--space-3); }

@@ -1,0 +1,13 @@
+{
+    "label": "Main",
+    "skip": "Skip to content",
+    "cook": "Cook",
+    "pantry": "Pantry",
+    "recipes": "Recipes",
+    "groceries": "Groceries",
+    "history": "History",
+    "account": "Account menu",
+    "credits": "Credits",
+    "manageAccount": "Manage account",
+    "signOut": "Sign out"
+}

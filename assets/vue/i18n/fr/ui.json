@@ -1,0 +1,15 @@
+{
+    "confirm": {
+        "message": "Cette action est définitive.",
+        "action": "Supprimer"
+    },
+    "date": {
+        "open": "Ouvrir le calendrier",
+        "clear": "Effacer la date",
+        "previousMonth": "Mois précédent",
+        "nextMonth": "Mois suivant"
+    },
+    "toast": {
+        "label": "Notifications"
+    }
+}
