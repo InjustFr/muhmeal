@@ -51,7 +51,7 @@ jobs:
 
       - uses: ./.github/actions/dev-stack
 
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with:
           name: ci-build
 
@@ -80,7 +80,7 @@ jobs:
 
       - uses: ./.github/actions/dev-stack
 
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with:
           name: ci-build
 
