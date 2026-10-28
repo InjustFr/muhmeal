@@ -116,6 +116,7 @@ test('a fraction chip sets the stock to three quarters of a container', async ({
     await sheet.getByRole('button', { name: 'More' }).click();
     await expect(sheet.getByTestId('stock-summary')).toHaveText('1¾ cartons');
     await sheet.getByRole('button', { name: 'Set stock' }).click();
+    await expect(sheet).toBeHidden();
     await page.reload();
     await search(page).fill(name);
     await expect(quantity(page, name)).toContainText('1¾ cartons');
