@@ -9,5 +9,5 @@ problem:
 login:
     failed: 'Connexion impossible, réessayez.'
     expired: 'Cette connexion a pris trop de temps ou a été ouverte dans un autre onglet, réessayez.'
-    denied: 'Votre compte mossyleaf n’a pas encore accès à Mossy Meals.'
+    denied: 'Votre compte mossyleaf n’a pas encore accès à muhmeal.'
     too_many_attempts: 'Trop de tentatives de connexion, patientez quelques minutes avant de réessayer.'

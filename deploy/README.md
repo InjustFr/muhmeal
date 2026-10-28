@@ -1,4 +1,4 @@
-# Mossy Meals — running on a server
+# muhmeal — running on a server
 
 This folder is all a server needs: `compose.yaml` runs the app image (FrankenPHP, assets built in) and a PostgreSQL 18 database. No source checkout, no PHP or Node on the host.
 
@@ -7,13 +7,13 @@ The repository is public, so the app host name is never committed. It only lives
 ## Prerequisites
 
 - Docker Engine with the Compose plugin (`docker compose version`).
-- A [mossyleaf accounts](../../accounts/deploy/README.md) server (Authentik) with the `mossy-meals` OIDC application: people sign in there.
+- A [mossyleaf accounts](../../accounts/deploy/README.md) server (Authentik) with the `muhmeal` OIDC application: people sign in there.
 - A reverse proxy (Caddy, nginx, Traefik…) that terminates HTTPS and forwards to the port you choose below.
 
 ## First install
 
 ```bash
-mkdir -p ~/mossy-meals && cd ~/mossy-meals
+mkdir -p ~/muhmeal && cd ~/muhmeal
 # copy compose.yaml, .env.dist and README.md here (`make deploy-files DEPLOY_HOST=user@server` from a dev machine does it)
 cp .env.dist .env
 chmod 600 .env
@@ -23,14 +23,14 @@ Fill `.env`:
 
 | Variable | Value |
 |---|---|
-| `IMAGE` / `TAG` | Image to run, e.g. `docker.io/injust/mossy-meals` / `latest` or a commit tag |
+| `IMAGE` / `TAG` | Image to run, e.g. `docker.io/injust/muhmeal` / `latest` or a commit tag |
 | `APP_PORT` | Host port the app listens on (the proxy targets it) |
 | `APP_BIND` | `0.0.0.0` when the proxy is on another machine, `127.0.0.1` when it runs on this server |
 | `TRUSTED_PROXIES` | Who may set `X-Forwarded-*`: the proxy IP/CIDR (e.g. `203.0.113.10`), `private_ranges`, or `REMOTE_ADDR` (trust whoever connects — only when a firewall lets nothing but the proxy reach `APP_PORT`) |
 | `DEFAULT_URI` | Public URL, `https://<app host>` |
 | `APP_SECRET` | `openssl rand -hex 32` |
 | `POSTGRES_PASSWORD` | `openssl rand -hex 24` (`POSTGRES_DB` / `POSTGRES_USER` can stay `app`) |
-| `OIDC_CLIENT_SECRET` | Client secret of the `mossy-meals` application in mossyleaf accounts (`MOSSY_MEALS_CLIENT_SECRET` in its `.env`) |
+| `OIDC_CLIENT_SECRET` | Client secret of the `muhmeal` application in mossyleaf accounts (`MUHMEAL_CLIENT_SECRET` in its `.env`) |
 | `ACCOUNTS_URL` | Optional, defaults to `https://accounts.mossyleaf.studio`; the `OIDC_*_URL` endpoints derive from it (override `OIDC_TOKEN_URL`/`OIDC_USERINFO_URL` to reach Authentik through an internal URL) |
 | `LOGIN_RATE_LIMIT` | Optional, sign-in requests allowed per address every 15 minutes, 30 by default |
 
@@ -48,7 +48,7 @@ On every start the app waits for the database, runs pending migrations, warms th
 
 ## Accounts
 
-There is no sign-up, password or invitation in Mossy Meals: people sign in with their mossyleaf account. To let someone in, invite them in mossyleaf accounts with the `mossy-meals` group (`make invite EMAIL=… NAME=… GROUPS=mossy-meals` in `accounts`). Their first sign-in adds them to the kitchen: everyone in the group sees and edits the same pantry, recipes, groceries and history.
+There is no sign-up, password or invitation in muhmeal: people sign in with their mossyleaf account. To let someone in, invite them in mossyleaf accounts with the `muhmeal` group (`make invite EMAIL=… NAME=… GROUPS=muhmeal` in `accounts`). Their first sign-in adds them to the kitchen: everyone in the group sees and edits the same pantry, recipes, groceries and history.
 
 ## Reverse proxy
 
@@ -85,7 +85,7 @@ A Let's Encrypt certificate lists its host names in the public Certificate Trans
 
 ## Update / rollback
 
-Every push to `main` runs the full test suite (`make ci`) and, only if it passes, publishes `docker.io/injust/mossy-meals:<short sha>` and `:latest` (GitHub Actions, [`.github/workflows/ci.yml`](../.github/workflows/ci.yml)). `make deploy` refuses a commit whose image is not published, so only tested commits reach the server. The image is public: the server pulls it without `docker login`.
+Every push to `main` runs the full test suite (`make ci`) and, only if it passes, publishes `docker.io/injust/muhmeal:<short sha>` and `:latest` (GitHub Actions, [`.github/workflows/ci.yml`](../.github/workflows/ci.yml)). `make deploy` refuses a commit whose image is not published, so only tested commits reach the server. The image is public: the server pulls it without `docker login`.
 
 From a dev machine, once the Actions run for the commit is green:
 
@@ -114,7 +114,7 @@ docker compose down -v         # stop and DELETE the database
 
 ## Behind a shared nginx on the same Docker host
 
-When the proxy is an nginx container of another Compose project on the same host, the app does not publish a port: a `compose.override.yaml` that exists on the server only joins the proxy network with an alias, and the nginx server block for `<app host>` proxies to `http://mossy-meals`.
+When the proxy is an nginx container of another Compose project on the same host, the app does not publish a port: a `compose.override.yaml` that exists on the server only joins the proxy network with an alias, and the nginx server block for `<app host>` proxies to `http://muhmeal`.
 
 ```yaml
 services:
@@ -124,7 +124,7 @@ services:
       default:
       proxy:
         aliases:
-          - mossy-meals
+          - muhmeal
 networks:
   proxy:
     name: <proxy network>

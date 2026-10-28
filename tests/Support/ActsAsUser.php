@@ -17,7 +17,7 @@ trait ActsAsUser
     {
         $entityManager = self::getContainer()->get(EntityManagerInterface::class);
         $id = strtolower((string) new Ulid());
-        $user = User::join($id, $email ?? \sprintf('%s@mossy-meals.test', $id), $displayName, Clock::get()->now());
+        $user = User::join($id, $email ?? \sprintf('%s@muhmeal.test', $id), $displayName, Clock::get()->now());
         $entityManager->persist($user);
         $entityManager->flush();
 

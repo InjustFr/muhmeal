@@ -11,7 +11,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  IMAGE: docker.io/injust/mossy-meals
+  IMAGE: docker.io/injust/muhmeal
 
 jobs:
   build:

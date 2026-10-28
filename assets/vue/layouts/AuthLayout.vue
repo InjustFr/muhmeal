@@ -7,7 +7,7 @@ defineProps({
 <template>
     <main class="auth-layout">
         <div class="auth-layout__panel">
-            <p class="auth-layout__brand">mossy meals</p>
+            <p class="auth-layout__brand">muhmeal</p>
             <section class="auth-layout__card">
                 <div class="auth-layout__body">
                     <h1 class="auth-layout__title">{{ title }}</h1>

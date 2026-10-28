@@ -1,6 +1,6 @@
 services:
   app:
-    image: ${IMAGE:-docker.io/injust/mossy-meals}:${TAG:-latest}
+    image: ${IMAGE:-docker.io/injust/muhmeal}:${TAG:-latest}
     restart: unless-stopped
     depends_on:
       database:

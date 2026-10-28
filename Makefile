@@ -6,11 +6,11 @@ PHP = $(EXEC) php
 CONSOLE = $(PHP) php bin/console
 PLAYWRIGHT_ARGS ?=
 
-IMAGE ?= docker.io/injust/mossy-meals
+IMAGE ?= docker.io/injust/muhmeal
 TAG ?= $(shell git rev-parse --short=7 HEAD)
 PLATFORM ?= linux/amd64
 DEPLOY_HOST ?= debian@duprat.cloud
-DEPLOY_DIR ?= /mnt/mossy-meals
+DEPLOY_DIR ?= /mnt/muhmeal
 REMOTE_DOCKER ?= sudo -n docker
 E2E_ASSETS_DIR ?= build-e2e
 CI_BUNDLE ?= ci-build.tgz
@@ -165,9 +165,9 @@ android-test: ## Android app JVM unit tests and lint
 apk: ## Build the signed Android release APK (creates android/keystore.jks and keystore.properties once: back them up, updates need the same key)
 	@[ -f android/keystore.jks ] || [ -f android/keystore.properties ] || ( password=$$(openssl rand -hex 24) && umask 077 && \
 		KEYSTORE_PASSWORD=$$password keytool -genkeypair -keystore android/keystore.jks -storetype PKCS12 \
-			-alias mossy-meals -keyalg RSA -keysize 4096 -validity 10000 -dname CN=MossyMeals \
+			-alias muhmeal -keyalg RSA -keysize 4096 -validity 10000 -dname CN=Muhmeal \
 			-storepass:env KEYSTORE_PASSWORD -keypass:env KEYSTORE_PASSWORD && \
-		printf 'storeFile=keystore.jks\nstorePassword=%s\nkeyAlias=mossy-meals\n' $$password > android/keystore.properties )
+		printf 'storeFile=keystore.jks\nstorePassword=%s\nkeyAlias=muhmeal\n' $$password > android/keystore.properties )
 	@[ -f android/keystore.jks ] && [ -f android/keystore.properties ] || { echo 'android/keystore.jks and android/keystore.properties go together: restore the missing one from your backup' >&2; exit 1; }
 	$(GRADLEW) assembleRelease -PversionCode=$$(git rev-list --count HEAD)
 

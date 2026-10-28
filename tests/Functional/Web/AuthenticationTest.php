@@ -25,7 +25,7 @@ final class AuthenticationTest extends WebTestCase
         $client->request('GET', '/login');
 
         $query = $this->authorizeQuery($client);
-        self::assertSame(['code', 'mossy-meals', 'http://localhost/login/check', 'openid email profile', 'S256'], [$query['response_type'], $query['client_id'], $query['redirect_uri'], $query['scope'], $query['code_challenge_method']]);
+        self::assertSame(['code', 'muhmeal', 'http://localhost/login/check', 'openid email profile', 'S256'], [$query['response_type'], $query['client_id'], $query['redirect_uri'], $query['scope'], $query['code_challenge_method']]);
         self::assertMatchesRegularExpression('/^[A-Za-z0-9_-]{22,}$/', $query['state']);
         self::assertMatchesRegularExpression('/^[A-Za-z0-9_-]{43}$/', $query['code_challenge']);
     }
@@ -99,7 +99,7 @@ final class AuthenticationTest extends WebTestCase
         $client->request('GET', '/login/check', ['state' => $this->authorizeQuery($client)['state'], 'error' => 'access_denied']);
         $client->followRedirect();
 
-        self::assertSame('Your mossyleaf account does not have access to Mossy Meals yet.', Json::string(self::props($client), 'error'));
+        self::assertSame('Your mossyleaf account does not have access to muhmeal yet.', Json::string(self::props($client), 'error'));
     }
 
     public function testAnEmailTakenByAnotherAccountIsExplained(): void
@@ -123,7 +123,7 @@ final class AuthenticationTest extends WebTestCase
 
         $client->request('POST', '/logout', ['_csrf_token' => $this->logoutToken($client)]);
 
-        self::assertResponseRedirects('https://accounts.test/end-session?client_id=mossy-meals&id_token_hint=id.'.$code.'&post_logout_redirect_uri=http%3A%2F%2Flocalhost%2F');
+        self::assertResponseRedirects('https://accounts.test/end-session?client_id=muhmeal&id_token_hint=id.'.$code.'&post_logout_redirect_uri=http%3A%2F%2Flocalhost%2F');
         $client->getCookieJar()->clear();
         $client->request('GET', '/');
         self::assertResponseRedirects('/login');
@@ -136,7 +136,7 @@ final class AuthenticationTest extends WebTestCase
 
         $client->request('POST', '/logout', ['_csrf_token' => $this->logoutToken($client)]);
 
-        self::assertResponseRedirects('https://accounts.test/end-session?client_id=mossy-meals');
+        self::assertResponseRedirects('https://accounts.test/end-session?client_id=muhmeal');
     }
 
     private function logoutToken(KernelBrowser $client): string

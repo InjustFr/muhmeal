@@ -18,7 +18,7 @@ final class DemoStory extends Story
     {
         $now = $this->clock->now();
 
-        UserFactory::createOne(['accountId' => 'demo', 'email' => 'demo@mossy-meals.local', 'displayName' => 'Demo', 'now' => $now]);
-        UserFactory::createOne(['accountId' => 'sam', 'email' => 'sam@mossy-meals.local', 'displayName' => 'Sam', 'now' => $now]);
+        UserFactory::createOne(['accountId' => 'demo', 'email' => 'demo@muhmeal.local', 'displayName' => 'Demo', 'now' => $now]);
+        UserFactory::createOne(['accountId' => 'sam', 'email' => 'sam@muhmeal.local', 'displayName' => 'Sam', 'now' => $now]);
     }
 }

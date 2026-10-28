@@ -57,13 +57,13 @@ final class ShellTest extends WebTestCase
 
     public function testTheSessionCarriesTheUserAndTheMembersOfTheKitchen(): void
     {
-        $client = self::signedInClient('louis@mossy-meals.test', 'Louis');
-        $ada = self::createUser('ada@mossy-meals.test', 'ada');
+        $client = self::signedInClient('louis@muhmeal.test', 'Louis');
+        $ada = self::createUser('ada@muhmeal.test', 'ada');
 
         $crawler = $client->request('GET', '/pantry');
 
         $session = Json::decode($crawler->filter('#app-session')->text());
-        self::assertSame(['louis@mossy-meals.test', 'Louis', 'https://accounts.test'], [Json::string($session, 'email'), Json::string($session, 'displayName'), Json::string($session, 'accountsUrl')]);
+        self::assertSame(['louis@muhmeal.test', 'Louis', 'https://accounts.test'], [Json::string($session, 'email'), Json::string($session, 'displayName'), Json::string($session, 'accountsUrl')]);
         self::assertMatchesRegularExpression('/^[0-9A-HJKMNP-TV-Z]{26}$/', Json::string($session, 'userId'));
         self::assertNotSame('', Json::string($session, 'logoutToken'));
         self::assertSame([['id' => $ada->id()->toBase32(), 'name' => 'ada'], ['id' => Json::string($session, 'userId'), 'name' => 'Louis']], Json::array($session, 'members'));

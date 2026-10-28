@@ -31,7 +31,7 @@ const tabActive = (tab) => (tab.to === '/' ? route.path === '/' : route.path ===
                 <a class="shell__skip" href="#main">{{ t('nav.skip') }}</a>
 
                 <header class="shell__header">
-                    <RouterLink to="/" class="shell__brand"><PhCookingPot size="1.75rem" weight="fill" aria-hidden="true" />mossy meals</RouterLink>
+                    <RouterLink to="/" class="shell__brand"><PhCookingPot size="1.75rem" weight="fill" aria-hidden="true" />muhmeal</RouterLink>
                     <AccountMenu />
                 </header>
 

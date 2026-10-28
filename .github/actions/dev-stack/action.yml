@@ -18,6 +18,6 @@ runs:
         context: .
         target: dev
         load: true
-        tags: mossy-meals-dev
+        tags: muhmeal-dev
         cache-from: type=gha,scope=dev
         cache-to: ${{ inputs.save-cache == 'true' && 'type=gha,scope=dev,mode=max' || '' }}
