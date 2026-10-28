@@ -42,5 +42,6 @@
         "add": "Ajouter autre chose",
         "done": "Terminé",
         "toast": "Courses rangées"
-    }
+    },
+    "close": "Fermer"
 }

@@ -14,7 +14,10 @@ async function api(page, method, url, body) {
 }
 
 const ingredient = (page, name, { stock = 12, unit = 'piece', location = 'pantry' } = {}) => api(page, 'POST', '/api/ingredients', { name, location, unit, manual: false, stock });
-const goToGroceries = (page) => page.getByRole('navigation', { name: 'Main' }).getByRole('link', { name: 'Groceries' }).click();
+async function goToGroceries(page) {
+    await page.getByRole('navigation', { name: 'Main' }).getByRole('link', { name: 'Pantry' }).click();
+    await page.getByTestId('go-shopping').click();
+}
 const stockOf = async (page, name) => (await api(page, 'GET', '/api/ingredients')).find((item) => item.name === name).stock;
 const row = (page, name) => page.getByTestId('tick-row').filter({ hasText: name });
 const group = (page, title) => page.locator('section').filter({ has: page.getByRole('heading', { level: 2, name: new RegExp(`^${title}`) }) });
@@ -48,6 +51,23 @@ test('what is running low is suggested, out of stock first, and a homemade ingre
     const seitan = (await api(page, 'GET', '/api/ingredients')).find((item) => item.name === 'Seitan');
     expect([seitan.stock, seitan.homemade, seitan.suggested]).toEqual([0, true, false]);
 
+});
+
+test('the groceries open from the pantry and close without losing the choices', async ({ page }) => {
+    await goToGroceries(page);
+    await expect(page.getByRole('navigation', { name: 'Main' }).getByRole('link', { name: 'Pantry' })).toHaveClass(/shell__tab--active/);
+    await row(page, 'Rice').click();
+    await expect(row(page, 'Rice')).toHaveAttribute('aria-checked', 'false');
+
+    await page.getByTestId('close-groceries').click();
+    await expect(page).toHaveURL(/\/pantry$/);
+    await page.getByTestId('go-shopping').click();
+    await expect(row(page, 'Rice')).toHaveAttribute('aria-checked', 'false');
+
+    await page.getByRole('navigation', { name: 'Main' }).getByRole('link', { name: 'Cook' }).click();
+    await page.getByRole('navigation', { name: 'Main' }).getByRole('link', { name: 'Pantry' }).click();
+    await expect(page).toHaveURL(/\/groceries$/);
+    await expect(row(page, 'Rice')).toHaveAttribute('aria-checked', 'false');
 });
 
 test('the Cook page counts the suggested ingredients', async ({ page }) => {

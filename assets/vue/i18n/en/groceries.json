@@ -42,5 +42,6 @@
         "add": "Add anything",
         "done": "Done",
         "toast": "Groceries put away"
-    }
+    },
+    "close": "Close"
 }

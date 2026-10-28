@@ -5,7 +5,6 @@ const TABS = [
     { name: 'Cook', path: '/' },
     { name: 'Pantry', path: '/pantry' },
     { name: 'Recipes', path: '/recipes' },
-    { name: 'Groceries', path: '/groceries' },
     { name: 'History', path: '/history' },
 ];
 

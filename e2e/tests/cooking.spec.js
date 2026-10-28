@@ -297,6 +297,31 @@ test('a recipe name already taken is refused, ignoring case', async ({ page }) =
     await expect(page).toHaveURL(/\/recipes\/new$/);
 });
 
+test('a recipe draft survives a trip to another tab and is cleared once saved', async ({ page }) => {
+    const item = await ingredient(page, unique('Lentils'));
+    const name = unique('Dal');
+
+    await goTo(page, 'Recipes');
+    await page.getByRole('link', { name: 'New recipe' }).click();
+    await page.getByLabel('Name', { exact: true }).fill(name);
+    await pickIngredient(page, item.name);
+
+    await goTo(page, 'Pantry');
+    await expect(page.getByRole('heading', { level: 1, name: 'Pantry' })).toBeVisible();
+    await goTo(page, 'Recipes');
+
+    await expect(page).toHaveURL(/\/recipes\/new$/);
+    await expect(page.getByLabel('Name', { exact: true })).toHaveValue(name);
+    await expect(page.getByTestId('recipe-line')).toHaveCount(1);
+    await page.getByTestId('save-recipe').click();
+    await expect(page.getByRole('heading', { level: 1, name })).toBeVisible();
+
+    await page.getByRole('link', { name: 'All recipes' }).click();
+    await page.getByRole('link', { name: 'New recipe' }).click();
+    await expect(page.getByLabel('Name', { exact: true })).toHaveValue('');
+    await expect(page.getByTestId('recipe-line')).toHaveCount(0);
+});
+
 test('a prep recipe is written with its output and yield', async ({ page }) => {
     const gluten = unique('Gluten flour');
     const output = unique('Tempeh');

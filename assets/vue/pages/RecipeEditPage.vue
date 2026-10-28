@@ -29,11 +29,12 @@ const recipes = ref([]);
 const loaded = ref(false);
 api.load('/api/recipes', recipes).catch(() => {}).finally(() => { loaded.value = true; });
 
-const editingId = computed(() => (typeof route.params.id === 'string' ? route.params.id : null));
-const existing = computed(() => recipes.value.find((candidate) => candidate.id === editingId.value) ?? null);
-const missing = computed(() => editingId.value !== null && loaded.value && existing.value === null);
+const editingId = typeof route.params.id === 'string' ? route.params.id : null;
+const existing = computed(() => recipes.value.find((candidate) => candidate.id === editingId) ?? null);
+const missing = computed(() => editingId !== null && loaded.value && existing.value === null);
 
-const form = reactive({ name: '', kind: 'meal', lines: [], output: null, whole: TWELFTHS_PER_UNIT, fraction: 0 });
+const blank = () => ({ name: '', kind: 'meal', lines: [], output: null, whole: TWELFTHS_PER_UNIT, fraction: 0 });
+const form = reactive(blank());
 const initialised = ref(false);
 const saving = ref(false);
 const problem = ref(null);
@@ -42,14 +43,18 @@ const kindOptions = computed(() => KINDS.map((value) => ({ value, label: t(`reci
 const used = computed(() => form.lines.map((line) => line.ingredientId));
 const complete = computed(() => isComplete(form));
 
-watch([existing, editingId], () => {
-    if (initialised.value) return;
-    if (editingId.value === null) {
+function initialise() {
+    if (editingId === null) {
+        Object.assign(form, blank());
         initialised.value = true;
     } else if (existing.value) {
         Object.assign(form, formFromView(existing.value));
         initialised.value = true;
     }
+}
+
+watch(existing, () => {
+    if (!initialised.value) initialise();
 }, { immediate: true });
 
 function addLine(ingredient) {
@@ -65,8 +70,9 @@ async function save() {
     problem.value = null;
     try {
         const body = payloadOf(form);
-        const saved = editingId.value === null ? await api.post('/api/recipes', body) : await api.put(`/api/recipes/${editingId.value}`, body);
+        const saved = editingId === null ? await api.post('/api/recipes', body) : await api.put(`/api/recipes/${editingId}`, body);
         toast.success(t('recipes.edit.saved', { name: saved.name }));
+        initialise();
         router.replace(`/recipes/${saved.id}`);
     } catch (error) {
         if (error.status === 422) problem.value = error.fieldErrors.name ?? error.message;
@@ -77,7 +83,7 @@ async function save() {
 }
 
 async function remove() {
-    const removed = await toast.attempt(() => api.del(`/api/recipes/${editingId.value}`), t('recipes.edit.deleted'));
+    const removed = await toast.attempt(() => api.del(`/api/recipes/${editingId}`), t('recipes.edit.deleted'));
     if (removed) router.replace('/recipes');
 }
 </script>

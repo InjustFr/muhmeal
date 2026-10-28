@@ -11,8 +11,8 @@
     },
     "ready": "Prêt à cuisiner",
     "preps": "Préparations possibles",
-    "logMeal": "Noter un repas",
+    "logMeal": "Repas sans recette",
     "cookIt": "Cuisiner",
     "makeIt": "Préparer",
-    "low": "{count} bientôt fini | {count} bientôt finis"
+    "low": "{count} ingrédient bientôt fini | {count} ingrédients bientôt finis"
 }

@@ -10,7 +10,7 @@
     },
     "status": {
         "ready": "Réalisable",
-        "missing": "Manque {count}"
+        "missing": "Manque {count} ingrédient | Manque {count} ingrédients"
     },
     "card": {
         "more": "+{count}"

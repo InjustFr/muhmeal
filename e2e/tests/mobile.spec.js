@@ -94,7 +94,8 @@ test('the shop screen fits a phone with big tap targets', async ({ page }) => {
     const ids = ['Yoghurt', 'Cheddar', 'Rice', 'Peas'].map((name) => ingredients.find((ingredient) => ingredient.name === name).id);
     await send('POST', '/api/grocery-list', { ingredientIds: ids });
 
-    await page.getByRole('navigation', { name: 'Main' }).getByRole('link', { name: 'Groceries' }).click();
+    await page.getByRole('navigation', { name: 'Main' }).getByRole('link', { name: 'Pantry' }).click();
+    await page.getByTestId('go-shopping').click();
     const rows = page.getByTestId('tick-row');
     await expect(rows).toHaveCount(4);
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBeTruthy();
@@ -128,7 +129,7 @@ test.describe('in French with a larger text size', () => {
         await signIn(page);
         await page.evaluate(() => { document.documentElement.style.fontSize = '130%'; });
         const labels = page.getByRole('navigation').locator('.shell__label');
-        await expect(labels).toHaveCount(5);
+        await expect(labels).toHaveCount(4);
         for (const box of await labels.evaluateAll((nodes) => nodes.map((node) => node.getBoundingClientRect().toJSON()))) {
             expect(box.left).toBeGreaterThanOrEqual(0);
             expect(box.right).toBeLessThanOrEqual(320);

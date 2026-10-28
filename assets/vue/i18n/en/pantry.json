@@ -68,5 +68,6 @@
         "delete": "Delete",
         "deleteTitle": "Delete {name}?",
         "deleteMessage": "The ingredient and its stock are removed. This cannot be undone."
-    }
+    },
+    "groceries": "Go shopping"
 }

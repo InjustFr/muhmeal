@@ -31,7 +31,7 @@ const summary = computed(() => {
             <div class="card__chips">
                 <span v-if="recipe.makes === 'prep'" class="card__chip card__chip--prep"><PhFlask size="0.875rem" weight="bold" aria-hidden="true" />{{ t('recipes.badge.prep') }}</span>
                 <span v-if="recipe.makeable" class="card__chip card__chip--ready"><PhCheckCircle size="0.875rem" weight="bold" aria-hidden="true" />{{ t('recipes.status.ready') }}</span>
-                <span v-else class="card__chip card__chip--missing"><PhWarning size="0.875rem" weight="bold" aria-hidden="true" />{{ t('recipes.status.missing', { count: recipe.missing.length }) }}</span>
+                <span v-else class="card__chip card__chip--missing"><PhWarning size="0.875rem" weight="bold" aria-hidden="true" />{{ t('recipes.status.missing', { count: recipe.missing.length }, recipe.missing.length) }}</span>
             </div>
         </div>
         <BaseButton v-if="actionLabel" class="card__action" :aria-label="`${actionLabel}: ${recipe.name}`" data-test="recipe-action" @click="emit('act')">{{ actionLabel }}</BaseButton>

@@ -1,6 +1,7 @@
 <script setup>
+import { KeepAlive, reactive, watch } from 'vue';
 import { RouterLink, RouterView, useRoute } from 'vue-router';
-import { PhBookOpenText, PhCarrot, PhClockCounterClockwise, PhCookingPot, PhShoppingCart } from '@phosphor-icons/vue';
+import { PhBookOpenText, PhCarrot, PhClockCounterClockwise, PhCookingPot } from '@phosphor-icons/vue';
 import { ConfigProvider, TooltipProvider } from 'reka-ui';
 import { useI18n } from 'vue-i18n';
 import AccountMenu from '../components/nav/AccountMenu.vue';
@@ -15,13 +16,21 @@ useSync();
 
 const TABS = [
     { to: '/', icon: PhCookingPot, label: 'nav.cook' },
-    { to: '/pantry', icon: PhCarrot, label: 'nav.pantry' },
+    { to: '/pantry', icon: PhCarrot, label: 'nav.pantry', also: '/groceries' },
     { to: '/recipes', icon: PhBookOpenText, label: 'nav.recipes' },
-    { to: '/groceries', icon: PhShoppingCart, label: 'nav.groceries' },
     { to: '/history', icon: PhClockCounterClockwise, label: 'nav.history' },
 ];
 
-const tabActive = (tab) => (tab.to === '/' ? route.path === '/' : route.path === tab.to || route.path.startsWith(`${tab.to}/`));
+const within = (path, root) => path === root || path.startsWith(`${root}/`);
+const owns = (tab, path) => (tab.to === '/' ? path === '/' : within(path, tab.to) || (tab.also !== undefined && within(path, tab.also)));
+const tabActive = (tab) => owns(tab, route.path);
+
+const lastVisited = reactive({});
+watch(() => route.fullPath, () => {
+    const tab = TABS.find((candidate) => owns(candidate, route.path));
+    if (tab) lastVisited[tab.to] = route.fullPath;
+}, { immediate: true });
+const tabTarget = (tab) => (tabActive(tab) ? tab.to : lastVisited[tab.to] ?? tab.to);
 </script>
 
 <template>
@@ -36,14 +45,16 @@ const tabActive = (tab) => (tab.to === '/' ? route.path === '/' : route.path ===
                 </header>
 
                 <nav class="shell__nav" :aria-label="t('nav.label')">
-                    <RouterLink v-for="tab in TABS" :key="tab.to" :to="tab.to" :class="['shell__tab', { 'shell__tab--active': tabActive(tab) }]" active-class="" exact-active-class="">
+                    <RouterLink v-for="tab in TABS" :key="tab.to" :to="tabTarget(tab)" :class="['shell__tab', { 'shell__tab--active': tabActive(tab) }]" active-class="" exact-active-class="">
                         <span class="shell__icon"><component :is="tab.icon" size="1.5rem" weight="duotone" aria-hidden="true" /></span>
                         <span class="shell__label">{{ t(tab.label) }}</span>
                     </RouterLink>
                 </nav>
 
                 <main id="main" class="shell__main">
-                    <RouterView />
+                    <RouterView v-slot="{ Component, route: shown }">
+                        <KeepAlive :max="10"><component :is="Component" :key="shown.fullPath" /></KeepAlive>
+                    </RouterView>
                 </main>
             </div>
 
@@ -80,7 +91,7 @@ const tabActive = (tab) => (tab.to === '/' ? route.path === '/' : route.path ===
     left: 0;
     z-index: 40;
     display: grid;
-    grid-template-columns: repeat(5, minmax(0, 1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     padding: var(--space-1) var(--space-1) calc(var(--space-1) + env(safe-area-inset-bottom));
     border-top: 0.125rem solid var(--color-border);
     background: var(--color-surface);

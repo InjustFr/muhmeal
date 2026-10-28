@@ -68,5 +68,6 @@
         "delete": "Supprimer",
         "deleteTitle": "Supprimer {name} ?",
         "deleteMessage": "L’ingrédient et son stock sont supprimés. Cette action est définitive."
-    }
+    },
+    "groceries": "Faire les courses"
 }

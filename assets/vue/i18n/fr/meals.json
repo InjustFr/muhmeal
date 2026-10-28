@@ -30,7 +30,7 @@
         "remove": "Retirer {name}"
     },
     "sheet": {
-        "title": "Noter un repas",
+        "title": "Repas sans recette",
         "cookTitle": "Cuisiner {name}",
         "submit": "Noter le repas"
     },

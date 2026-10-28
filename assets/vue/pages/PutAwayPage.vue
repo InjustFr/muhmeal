@@ -1,6 +1,6 @@
 <script setup>
 import { computed, ref, watch } from 'vue';
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { PhCaretDown, PhCaretUp, PhShoppingBag } from '@phosphor-icons/vue';
 import { useI18n } from 'vue-i18n';
 import BoughtRow from '../components/groceries/BoughtRow.vue';
@@ -18,6 +18,7 @@ import { boughtLine, groupByLocation } from '../groceries/lists.js';
 const { t } = useI18n();
 const api = useApi();
 const toast = useToast();
+const route = useRoute();
 const router = useRouter();
 
 const list = ref(undefined);
@@ -30,9 +31,12 @@ const saving = ref(false);
 
 watch(list, (current) => {
     if (current === null) {
-        router.replace('/groceries');
-    } else if (current && !started.value) {
-        lines.value = current.items.filter((item) => item.ticked).map(boughtLine);
+        lines.value = [];
+        started.value = false;
+        if (route.name === 'put-away') router.replace('/groceries');
+    } else if (current) {
+        const listed = lines.value.map((line) => line.ingredientId);
+        lines.value = [...lines.value, ...current.items.filter((item) => item.ticked && !listed.includes(item.ingredientId)).map(boughtLine)];
         started.value = true;
     }
 }, { immediate: true });

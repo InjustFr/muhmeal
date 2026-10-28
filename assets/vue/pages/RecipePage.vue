@@ -17,7 +17,7 @@ import { describeQuantity, formatQuantity } from '../pantry/quantity.js';
 
 const { t } = useI18n();
 const api = useApi();
-const route = useRoute();
+const id = useRoute().params.id;
 
 const recipes = ref([]);
 const loaded = ref(false);
@@ -26,7 +26,7 @@ api.load('/api/recipes', recipes).catch(() => {}).finally(() => { loaded.value =
 const mealSheet = reactive({ open: false });
 const prepSheet = reactive({ open: false });
 
-const recipe = computed(() => recipes.value.find((candidate) => candidate.id === route.params.id) ?? null);
+const recipe = computed(() => recipes.value.find((candidate) => candidate.id === id) ?? null);
 const short = computed(() => (recipe.value ? lacking(recipe.value).map((line) => line.name).join(', ') : ''));
 
 const need = (line) => (line.amount === null ? t('recipes.page.some') : describeQuantity(line.amount, line.unit, currentLanguage(), t));

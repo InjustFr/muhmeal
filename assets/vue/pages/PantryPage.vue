@@ -1,6 +1,6 @@
 <script setup>
 import { computed, reactive, ref } from 'vue';
-import { PhCarrot, PhMagnifyingGlass, PhPlus } from '@phosphor-icons/vue';
+import { PhCarrot, PhMagnifyingGlass, PhPlus, PhShoppingCart } from '@phosphor-icons/vue';
 import { useI18n } from 'vue-i18n';
 import IngredientRow from '../components/pantry/IngredientRow.vue';
 import IngredientSheet from '../components/pantry/IngredientSheet.vue';
@@ -52,7 +52,9 @@ function setStock(row) {
 
 <template>
     <div class="page">
-        <PageHeader :title="t('nav.pantry')" />
+        <PageHeader :title="t('nav.pantry')">
+            <BaseButton to="/groceries" variant="secondary" data-test="go-shopping"><PhShoppingCart size="1.125rem" weight="bold" aria-hidden="true" />{{ t('pantry.groceries') }}</BaseButton>
+        </PageHeader>
 
         <div class="pantry__tools">
             <ChipGroup v-model="place" variant="segmented" :options="placeOptions" :label="t('pantry.location.label')" />
