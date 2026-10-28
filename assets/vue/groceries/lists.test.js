@@ -83,8 +83,8 @@ describe('stockAfterBuying', () => {
 });
 
 describe('boughtStep and boughtMax', () => {
-    it('steps by a unit for pieces and by a quarter for containers', () => {
-        expect([boughtStep({ unit: 'piece' }), boughtStep({ unit: 'jar' })]).toEqual([12, 3]);
+    it('steps by one whole unit, containers included', () => {
+        expect([boughtStep({ unit: 'piece' }), boughtStep({ unit: 'jar' })]).toEqual([12, 12]);
     });
 
     it('leaves room up to 999 units', () => {

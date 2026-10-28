@@ -1,4 +1,3 @@
-import { stepFor } from '../cooking/lines.js';
 import { LOCATIONS } from '../pantry/locations.js';
 import { MAX_TWELFTHS, TWELFTHS_PER_UNIT } from '../pantry/quantity.js';
 
@@ -30,7 +29,7 @@ export function boughtLine(source) {
     };
 }
 
-export const boughtStep = (line) => stepFor(line.unit);
+export const boughtStep = () => TWELFTHS_PER_UNIT;
 
 export const boughtMax = (line) => MAX_TWELFTHS - line.stock;
 

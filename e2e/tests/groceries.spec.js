@@ -117,7 +117,7 @@ test('a shopping trip is prepared, shared between two phones and put away with a
     await expect(line(page, milk).getByTestId('bought-preview')).toHaveText('¼ → 1¼ cartons');
     await expect(line(page, oats).getByTestId('bought-preview')).toHaveText('0 → 1 bag');
     await line(page, milk).getByRole('button', { name: `Buy more ${milk}` }).click();
-    await expect(line(page, milk).getByTestId('bought-preview')).toHaveText('¼ → 1½ cartons');
+    await expect(line(page, milk).getByTestId('bought-preview')).toHaveText('¼ → 2¼ cartons');
     await expect(line(page, 'Yoghurt')).toHaveCount(0);
 
     await page.getByTestId('toggle-unbought').click();
