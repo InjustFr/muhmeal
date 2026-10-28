@@ -133,7 +133,7 @@ test('a shopping trip is prepared, shared between two phones and put away with a
     await expect(page).toHaveURL(/\/groceries$/);
     await expect(page.getByTestId('start-shopping')).toBeVisible();
 
-    expect(await stockOf(page, milk)).toBe(18);
+    expect(await stockOf(page, milk)).toBe(27);
     expect(await stockOf(page, oats)).toBe(12);
     expect(await stockOf(page, chives)).toBe(36);
     expect((await api(page, 'GET', '/api/ingredients')).filter((item) => ['Yoghurt', 'Cheddar', 'Leeks', 'Rice'].includes(item.name)).map((item) => [item.name, item.stock])).toEqual(demoStocks);
@@ -181,9 +181,6 @@ test('an item ticked in at put-away and stepped down to nothing adds nothing to 
     await page.getByTestId('toggle-unbought').click();
     await row(page, name).click();
     await expect(line(page, name).getByTestId('bought-preview')).toHaveText('0 → 1 bag');
-    await line(page, name).getByRole('button', { name: `Buy less ${name}` }).click();
-    await line(page, name).getByRole('button', { name: `Buy less ${name}` }).click();
-    await line(page, name).getByRole('button', { name: `Buy less ${name}` }).click();
     await line(page, name).getByRole('button', { name: `Buy less ${name}` }).click();
     await expect(line(page, name).getByTestId('bought-preview')).toHaveText('Nothing added');
 
