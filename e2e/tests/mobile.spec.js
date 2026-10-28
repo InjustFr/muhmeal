@@ -120,3 +120,20 @@ test('the shop screen fits a phone with big tap targets', async ({ page }) => {
 
     await send('POST', '/api/grocery-list/put-away', { bought: [] });
 });
+
+test.describe('in French with a larger text size', () => {
+    test.use({ locale: 'fr-FR', viewport: { width: 320, height: 720 } });
+
+    test('every tab label stays on the screen', async ({ page }) => {
+        await signIn(page);
+        await page.evaluate(() => { document.documentElement.style.fontSize = '130%'; });
+        const labels = page.getByRole('navigation').locator('.shell__label');
+        await expect(labels).toHaveCount(5);
+        for (const box of await labels.evaluateAll((nodes) => nodes.map((node) => node.getBoundingClientRect().toJSON()))) {
+            expect(box.left).toBeGreaterThanOrEqual(0);
+            expect(box.right).toBeLessThanOrEqual(320);
+            expect(box.height).toBeLessThan(30);
+        }
+        expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBeTruthy();
+    });
+});

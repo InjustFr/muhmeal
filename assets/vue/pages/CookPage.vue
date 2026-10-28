@@ -48,7 +48,7 @@ function make(recipe) {
             <BaseButton data-test="log-meal" @click="logMeal"><PhPlus size="1.125rem" weight="bold" aria-hidden="true" />{{ t('cook.logMeal') }}</BaseButton>
         </PageHeader>
 
-        <RouterLink v-if="runningLow > 0" to="/groceries" class="cook__low" data-test="running-low"><PhShoppingCart size="1.25rem" weight="duotone" aria-hidden="true" />{{ t('cook.low', { count: runningLow }) }}</RouterLink>
+        <RouterLink v-if="runningLow > 0" to="/groceries" class="cook__low" data-test="running-low"><PhShoppingCart size="1.25rem" weight="duotone" aria-hidden="true" />{{ t('cook.low', { count: runningLow }, runningLow) }}</RouterLink>
 
         <EmptyState v-if="recipes.length === 0" :icon="PhCookingPot" :title="t('cook.empty.title')" :hint="t('cook.empty.hint')">
             <BaseButton to="/recipes/new">{{ t('cook.empty.action') }}</BaseButton>

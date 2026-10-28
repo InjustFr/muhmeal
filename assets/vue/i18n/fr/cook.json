@@ -14,5 +14,5 @@
     "logMeal": "Noter un repas",
     "cookIt": "Cuisiner",
     "makeIt": "Préparer",
-    "low": "{count} bientôt fini(s)"
+    "low": "{count} bientôt fini | {count} bientôt finis"
 }

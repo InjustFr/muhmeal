@@ -39,10 +39,10 @@ const summary = computed(() => {
 </template>
 
 <style scoped>
-.card { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); padding: var(--space-3) var(--space-4); border: 0.125rem solid var(--color-border); border-radius: var(--radius-lg); background: var(--color-surface); box-shadow: var(--shadow); }
+.card { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space-3); padding: var(--space-3) var(--space-4); border: 0.125rem solid var(--color-border); border-radius: var(--radius-lg); background: var(--color-surface); box-shadow: var(--shadow); }
 .card__action { flex-shrink: 0; white-space: nowrap; }
-.card__text { display: flex; flex-direction: column; gap: var(--space-1); min-width: 0; }
-.card__name { color: var(--color-ink); font-family: var(--font-display); font-size: 1.25rem; font-weight: 600; text-decoration: none; overflow-wrap: anywhere; }
+.card__text { display: flex; flex: 1 1 10rem; flex-direction: column; gap: var(--space-1); min-width: 0; }
+.card__name { color: var(--color-ink); font-family: var(--font-display); font-size: 1.25rem; font-weight: 600; text-decoration: none; overflow-wrap: break-word; }
 .card__name:hover { text-decoration: underline; text-underline-offset: 0.1875rem; }
 .card__summary { color: var(--color-muted); font-size: var(--font-size-md); overflow-wrap: anywhere; }
 .card__chips { display: flex; flex-wrap: wrap; gap: var(--space-2); }
