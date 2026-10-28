@@ -49,6 +49,20 @@ final class IngredientUseCasesTest extends KernelTestCase
         self::assertSame(6, $this->add('Milk', Location::Fridge, Unit::Carton, lowAt: 6)->lowAt);
     }
 
+    public function testAddSetsTheStockWhenGiven(): void
+    {
+        $milk = $this->add('Milk', Location::Fridge, Unit::Carton, stock: 21);
+
+        self::assertSame([21, false, false], [$milk->stock, $milk->runningLow, $milk->out]);
+    }
+
+    public function testAStockOutOfRangeIsRefusedOnAdd(): void
+    {
+        $this->expectExceptionObject(new QuantityOutOfRange(999));
+
+        $this->add('Milk', stock: 11989);
+    }
+
     public function testAddIsStoredForGood(): void
     {
         $this->add('Leeks');
@@ -237,9 +251,9 @@ final class IngredientUseCasesTest extends KernelTestCase
         self::assertSame([], self::getContainer()->get(IngredientQueries::class)->all());
     }
 
-    private function add(string $name, Location $location = Location::Pantry, Unit $unit = Unit::Piece, bool $manual = false, ?int $lowAt = null): IngredientView
+    private function add(string $name, Location $location = Location::Pantry, Unit $unit = Unit::Piece, bool $manual = false, ?int $lowAt = null, int $stock = 0): IngredientView
     {
-        return self::getContainer()->get(AddIngredientHandler::class)(new AddIngredient($name, $location, $unit, $manual, $lowAt));
+        return self::getContainer()->get(AddIngredientHandler::class)(new AddIngredient($name, $location, $unit, $manual, $lowAt, $stock));
     }
 
     private function edit(IngredientView $ingredient, string $name, Location $location = Location::Pantry, Unit $unit = Unit::Piece, bool $manual = false, ?int $lowAt = null): IngredientView

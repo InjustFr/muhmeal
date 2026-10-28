@@ -15,6 +15,7 @@ final readonly class AddIngredient
         public Unit $unit,
         public bool $manual,
         public ?int $lowAt = null,
+        public int $stock = 0,
     ) {
     }
 }

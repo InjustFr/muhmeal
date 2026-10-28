@@ -6,7 +6,7 @@ const quantity = (page, name) => row(page, name).getByRole('button', { name: /^S
 const search = (page) => page.getByRole('searchbox', { name: 'Search or add an ingredient' });
 const place = (page, name) => page.getByRole('group', { name: 'Place' }).getByRole('button', { name });
 
-async function addIngredient(page, name, { location = 'Fridge', unit = null } = {}) {
+async function addIngredient(page, name, { location = 'Fridge', unit = null, empty = false } = {}) {
     await search(page).fill(name);
     await page.getByRole('button', { name: `Add “${name}”` }).click();
     const sheet = page.getByRole('dialog', { name: 'New ingredient' });
@@ -16,6 +16,7 @@ async function addIngredient(page, name, { location = 'Fridge', unit = null } = 
         await sheet.getByRole('combobox', { name: 'Counted in' }).click();
         await page.getByRole('option', { name: unit }).click();
     }
+    if (empty) await sheet.getByRole('button', { name: 'Less in stock' }).click();
     await sheet.getByRole('button', { name: 'Save', exact: true }).click();
     await expect(sheet).toBeHidden();
     await expect(row(page, name)).toBeVisible();
@@ -49,7 +50,7 @@ test('rows that are out sit dimmed at the bottom of their place', async ({ page 
     expect(outs).toEqual([...outs].sort((a, b) => Number(a) - Number(b)));
 });
 
-test('searching offers to add a new name, and the ingredient is created', async ({ page }) => {
+test('searching offers to add a new name, and the ingredient is created with the stock set in the sheet', async ({ page }) => {
     const name = unique('Leeks');
     await search(page).fill(name);
     await expect(page.getByTestId('ingredient-row')).toHaveCount(0);
@@ -57,16 +58,40 @@ test('searching offers to add a new name, and the ingredient is created', async 
     const sheet = page.getByRole('dialog', { name: 'New ingredient' });
     await expect(sheet.getByLabel('Name')).toHaveValue(name);
     await sheet.getByRole('button', { name: 'Fridge' }).click();
+    await expect(sheet.getByRole('group', { name: 'Units in stock' })).toContainText('1');
+    await sheet.getByRole('button', { name: 'More in stock' }).click();
+    await sheet.getByRole('button', { name: '¾' }).click();
     await sheet.getByRole('button', { name: 'Save', exact: true }).click();
 
     await expect(row(page, name)).toBeVisible();
     await expect(page.getByRole('button', { name: `Add “${name}”` })).toHaveCount(0);
+    await expect(quantity(page, name)).toHaveText(/2¾$/);
+    await expect(row(page, name)).not.toContainText('Out');
+
+    await page.reload();
+    await search(page).fill(name);
+    await expect(quantity(page, name)).toHaveText(/2¾$/);
+});
+
+test('an ingredient added with no stock is out', async ({ page }) => {
+    const name = unique('Chives');
+    await addIngredient(page, name, { empty: true });
+
     await expect(row(page, name)).toContainText('Out');
+    await expect(quantity(page, name)).toHaveText(/0$/);
+});
+
+test('editing an ingredient offers no stock to set', async ({ page }) => {
+    await row(page, 'Milk').getByRole('button', { name: 'Milk (edit)' }).click();
+    const sheet = page.getByRole('dialog', { name: 'Edit ingredient' });
+
+    await expect(sheet.getByLabel('Name')).toHaveValue('Milk');
+    await expect(sheet.getByRole('group', { name: 'Units in stock' })).toHaveCount(0);
 });
 
 test('two taps on plus are sent as one change and survive a reload', async ({ page }) => {
     const name = unique('Carrots');
-    await addIngredient(page, name);
+    await addIngredient(page, name, { empty: true });
     const adjustments = [];
     page.on('request', (request) => request.url().endsWith('/adjust') && adjustments.push(request.postDataJSON()));
 
@@ -89,7 +114,7 @@ test('two taps on plus are sent as one change and survive a reload', async ({ pa
 
 test('the minus never goes below zero', async ({ page }) => {
     const name = unique('Lemons');
-    await addIngredient(page, name);
+    await addIngredient(page, name, { empty: true });
 
     await expect(row(page, name).getByRole('button', { name: `One less ${name}` })).toBeDisabled();
     await row(page, name).getByRole('button', { name: `One more ${name}` }).click();
@@ -101,7 +126,7 @@ test('the minus never goes below zero', async ({ page }) => {
 
 test('a fraction chip sets the stock to three quarters of a container', async ({ page }) => {
     const name = unique('Cream');
-    await addIngredient(page, name, { unit: 'Carton' });
+    await addIngredient(page, name, { unit: 'Carton', empty: true });
 
     await quantity(page, name).click();
     const sheet = page.getByRole('dialog', { name: `How much ${name}?` });

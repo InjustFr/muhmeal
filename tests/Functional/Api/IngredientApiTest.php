@@ -56,6 +56,50 @@ final class IngredientApiTest extends WebTestCase
         self::assertSame([], self::body($client));
     }
 
+    public function testAnIngredientIsAddedWithItsStock(): void
+    {
+        $client = self::signedInClient();
+
+        $client->jsonRequest('POST', '/api/ingredients', ['name' => 'Milk', 'location' => 'fridge', 'unit' => 'carton', 'stock' => 21]);
+
+        self::assertResponseStatusCodeSame(201);
+        self::assertSame([21, false, false], [Json::int(self::body($client), 'stock'), self::body($client)['runningLow'], self::body($client)['out']]);
+    }
+
+    public function testEditingNeverTouchesTheStock(): void
+    {
+        $client = self::signedInClient();
+        $client->jsonRequest('POST', '/api/ingredients', ['name' => 'Milk', 'location' => 'fridge', 'unit' => 'carton', 'stock' => 21]);
+        $id = Json::string(self::body($client), 'id');
+
+        $client->jsonRequest('PUT', "/api/ingredients/$id", ['name' => 'Milk', 'location' => 'fridge', 'unit' => 'carton', 'stock' => 0]);
+
+        self::assertResponseIsSuccessful();
+        self::assertSame(21, Json::int(self::body($client), 'stock'));
+    }
+
+    /**
+     * @param array<string, mixed> $payload
+     */
+    #[DataProvider('invalidInitialStocks')]
+    public function testInvalidInitialStocksAre422(array $payload): void
+    {
+        $client = self::signedInClient();
+
+        $client->jsonRequest('POST', '/api/ingredients', ['name' => 'Milk', 'location' => 'fridge', 'unit' => 'carton', ...$payload]);
+
+        self::assertResponseStatusCodeSame(422, (string) json_encode($payload));
+        self::assertNotSame([], Json::array(self::body($client), 'violations'));
+    }
+
+    /** @return iterable<string, array{array<string, mixed>}> */
+    public static function invalidInitialStocks(): iterable
+    {
+        yield 'negative' => [['stock' => -1]];
+        yield 'above 999 units' => [['stock' => 11989]];
+        yield 'a word' => [['stock' => 'plenty']];
+    }
+
     public function testTheListIsSortedByNameIgnoringCase(): void
     {
         $client = self::signedInClient();

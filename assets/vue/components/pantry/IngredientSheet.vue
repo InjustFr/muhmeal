@@ -4,7 +4,7 @@ import { useI18n } from 'vue-i18n';
 import { useApi } from '../../composables/useApi.js';
 import { useToast } from '../../composables/useToast.js';
 import { LOCATION_ICONS, LOCATIONS, UNITS } from '../../pantry/locations.js';
-import { defaultLowAt, MAX_TWELFTHS } from '../../pantry/quantity.js';
+import { defaultLowAt, MAX_TWELFTHS, TWELFTHS_PER_UNIT } from '../../pantry/quantity.js';
 import BaseButton from '../ui/BaseButton.vue';
 import BaseSelect from '../ui/BaseSelect.vue';
 import BaseSwitch from '../ui/BaseSwitch.vue';
@@ -12,6 +12,7 @@ import BottomSheet from '../ui/BottomSheet.vue';
 import ChipGroup from '../ui/ChipGroup.vue';
 import ConfirmButton from '../ui/ConfirmButton.vue';
 import FormField from '../ui/FormField.vue';
+import FractionChips from './FractionChips.vue';
 import QuantityStepper from './QuantityStepper.vue';
 
 const props = defineProps({
@@ -30,6 +31,8 @@ const location = ref('pantry');
 const unit = ref('piece');
 const manual = ref(false);
 const lowAt = ref(defaultLowAt('piece'));
+const whole = ref(TWELFTHS_PER_UNIT);
+const fraction = ref(0);
 const nameError = ref(null);
 const saving = ref(false);
 const nameInput = ref(null);
@@ -52,7 +55,13 @@ watch(open, (isOpen) => {
     unit.value = 'piece';
     manual.value = false;
     lowAt.value = defaultLowAt('piece');
+    resetStock();
 });
+
+function resetStock() {
+    whole.value = TWELFTHS_PER_UNIT;
+    fraction.value = 0;
+}
 
 function changeUnit(next) {
     if (lowAt.value === defaultLowAt(unit.value)) lowAt.value = defaultLowAt(next);
@@ -69,7 +78,7 @@ function focusName(event) {
 async function save(another) {
     saving.value = true;
     nameError.value = null;
-    const body = { name: name.value, location: location.value, unit: unit.value, manual: manual.value, lowAt: lowAt.value };
+    const body = { name: name.value, location: location.value, unit: unit.value, manual: manual.value, lowAt: lowAt.value, ...(editing.value ? {} : { stock: whole.value + fraction.value }) };
     try {
         if (editing.value) {
             await api.put(`/api/ingredients/${props.ingredient.id}`, body);
@@ -81,6 +90,7 @@ async function save(another) {
             name.value = '';
             manual.value = false;
             lowAt.value = defaultLowAt(unit.value);
+            resetStock();
             await nextTick();
             nameInput.value?.focus();
         } else {
@@ -112,6 +122,14 @@ async function remove() {
             <FormField :label="t('pantry.sheet.unit')">
                 <BaseSelect :model-value="unit" :options="unitOptions" @update:model-value="changeUnit" />
             </FormField>
+            <template v-if="!editing">
+                <FormField :label="t('pantry.sheet.stock')" as="div">
+                    <QuantityStepper v-model="whole" :label="t('pantry.sheet.stockWhole')" :decrease-label="t('pantry.sheet.stockLess')" :increase-label="t('pantry.sheet.stockMore')" :step="TWELFTHS_PER_UNIT" :max="MAX_TWELFTHS - TWELFTHS_PER_UNIT" />
+                </FormField>
+                <FormField :label="t('pantry.sheet.stockFraction')" as="div">
+                    <FractionChips v-model="fraction" :label="t('pantry.sheet.stockFraction')" />
+                </FormField>
+            </template>
             <FormField :label="t('pantry.sheet.manual')" :hint="t('pantry.sheet.manualHint')" as="div">
                 <BaseSwitch v-model="manual" :label="t('pantry.sheet.manual')" />
             </FormField>

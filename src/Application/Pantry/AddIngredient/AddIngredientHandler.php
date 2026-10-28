@@ -35,6 +35,7 @@ final readonly class AddIngredientHandler
             null === $command->lowAt ? null : Quantity::ofTwelfths($command->lowAt),
             $this->clock->now(),
         );
+        $ingredient->setStock(Quantity::ofTwelfths($command->stock));
         $this->ingredients->add($ingredient);
         $this->transaction->commit();
 

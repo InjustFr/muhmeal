@@ -15,8 +15,8 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/api/ingredients', name: 'api_ingredients_add', methods: ['POST'], format: 'json')]
 final class AddIngredientController extends AbstractController
 {
-    public function __invoke(#[MapRequestPayload] IngredientPayload $payload, AddIngredientHandler $addIngredient): JsonResponse
+    public function __invoke(#[MapRequestPayload] AddIngredientPayload $payload, AddIngredientHandler $addIngredient): JsonResponse
     {
-        return $this->json($addIngredient(new AddIngredient($payload->name, $payload->location, $payload->unit, $payload->manual, $payload->lowAt)), Response::HTTP_CREATED);
+        return $this->json($addIngredient(new AddIngredient($payload->name, $payload->location, $payload->unit, $payload->manual, $payload->lowAt, $payload->stock)), Response::HTTP_CREATED);
     }
 }
