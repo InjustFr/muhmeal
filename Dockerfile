@@ -18,7 +18,7 @@ COPY composer.json composer.lock symfony.lock ./
 RUN composer install --no-dev --no-scripts --no-autoloader --prefer-dist --no-progress --no-interaction
 
 
-FROM node:22-alpine AS assets
+FROM node:26-alpine AS assets
 
 WORKDIR /app
 COPY package.json package-lock.json .npmrc ./
