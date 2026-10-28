@@ -1,0 +1,54 @@
+{
+    "type": {
+        "label": "Quel repas",
+        "breakfast": "Petit-déjeuner",
+        "lunch": "Déjeuner",
+        "dinner": "Dîner",
+        "snack": "Goûter"
+    },
+    "day": {
+        "label": "Quel jour",
+        "today": "Aujourd’hui",
+        "yesterday": "Hier",
+        "other": "Un autre jour"
+    },
+    "eaters": {
+        "label": "Qui a mangé"
+    },
+    "title": {
+        "label": "Titre",
+        "hint": "Facultatif si vous listez des ingrédients.",
+        "placeholder": "Pizza à emporter, restes…"
+    },
+    "lines": {
+        "label": "Ingrédients utilisés",
+        "empty": "Aucun ingrédient pour l’instant. Ajoutez ce que vous avez utilisé, ou donnez simplement un titre au repas.",
+        "notDeducted": "Non décompté",
+        "group": "Quantité de {name}",
+        "less": "Moins de {name}",
+        "more": "Plus de {name}",
+        "remove": "Retirer {name}"
+    },
+    "sheet": {
+        "title": "Noter un repas",
+        "cookTitle": "Cuisiner {name}",
+        "submit": "Noter le repas"
+    },
+    "prep": {
+        "title": "Préparer {name}",
+        "makes": "Donne",
+        "made": "Quantité obtenue",
+        "less": "Produire moins",
+        "more": "Produire plus",
+        "submit": "Préparer"
+    },
+    "done": {
+        "title": "Bon appétit !",
+        "prepTitle": "C’est prêt !",
+        "close": "Terminé"
+    },
+    "toast": {
+        "logged": "Repas noté",
+        "made": "{name} préparé"
+    }
+}

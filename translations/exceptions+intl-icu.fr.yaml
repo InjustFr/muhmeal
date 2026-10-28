@@ -1,5 +1,5 @@
 shared:
-    not_found: '{subject, select, user {Cette personne n’existe} ingredient {Cet ingrédient n’existe} other {Cet élément n’existe}} plus.'
+    not_found: '{subject, select, user {Cette personne n’existe} ingredient {Cet ingrédient n’existe} recipe {Cette recette n’existe} meal {Ce repas n’existe} other {Cet élément n’existe}} plus.'
     invalid_day: '« {day} » n’est pas une date valide.'
 user:
     invalid_email: '« {email} » n’est pas une adresse e-mail valide.'
@@ -10,3 +10,18 @@ ingredient:
     name_too_long: 'Un nom d’ingrédient compte au plus {max} caractères.'
     name_taken: 'Il existe déjà un ingrédient nommé « {name} ».'
     quantity_out_of_range: 'Une quantité va de 0 à {max} unités.'
+    in_use: '« {name} » ne peut pas être supprimé : il est utilisé par {recipes}.'
+recipe:
+    empty_name: 'Donnez un nom à la recette.'
+    name_too_long: 'Un nom de recette compte au plus {max} caractères.'
+    name_taken: 'Il existe déjà une recette nommée « {name} ».'
+    needs_ingredient: 'Une recette demande au moins un ingrédient.'
+    zero_yield: 'Une préparation doit produire plus de zéro.'
+    not_a_prep: '« {name} » fait un repas, pas un ingrédient.'
+cooking:
+    ingredient_listed_twice: '« {ingredient} » apparaît deux fois.'
+    zero_quantity: 'La quantité de « {ingredient} » doit être supérieure à zéro.'
+meal:
+    needs_eater: 'Quelqu’un doit manger ce repas.'
+    empty: 'Donnez un titre au repas ou au moins un ingrédient.'
+    title_too_long: 'Un titre de repas compte au plus {max} caractères.'

@@ -2,5 +2,22 @@
     "empty": {
         "title": "Aucun repas pour l’instant",
         "hint": "Les repas cuisinés ou enregistrés seront listés ici, jour après jour."
+    },
+    "today": "Aujourd’hui",
+    "yesterday": "Hier",
+    "eaters": "Qui a mangé",
+    "loadOlder": "Charger les repas plus anciens",
+    "lines": {
+        "show": "Ingrédients ({count})",
+        "hide": "Masquer les ingrédients"
+    },
+    "delete": {
+        "label": "Supprimer {name}",
+        "title": "Supprimer ce repas ?",
+        "message": "« {name} » est retiré de l’historique.",
+        "putBack": "Remettre les ingrédients",
+        "putBackHint": "Rajoute au stock ce que le repas avait utilisé.",
+        "confirm": "Supprimer",
+        "done": "Repas supprimé"
     }
 }

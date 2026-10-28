@@ -23,6 +23,14 @@
         "out": "Out",
         "low": "Low"
     },
+    "picker": {
+        "add": "Add ingredient",
+        "search": "Search ingredients",
+        "close": "Close the search",
+        "left": "{amount} left",
+        "none": "No ingredient matches",
+        "create": "Add “{name}”"
+    },
     "row": {
         "increase": "One more {name}",
         "decrease": "One less {name}",

@@ -19,8 +19,10 @@ const props = defineProps({
     ingredient: { type: Object, default: null },
     initialName: { type: String, default: '' },
     initialLocation: { type: String, default: 'pantry' },
+    allowAnother: { type: Boolean, default: true },
 });
 const open = defineModel('open', { type: Boolean, required: true });
+const emit = defineEmits(['saved']);
 
 const { t } = useI18n();
 const api = useApi();
@@ -81,9 +83,9 @@ async function save(another) {
     const body = { name: name.value, location: location.value, unit: unit.value, manual: manual.value, lowAt: lowAt.value, ...(editing.value ? {} : { stock: whole.value + fraction.value }) };
     try {
         if (editing.value) {
-            await api.put(`/api/ingredients/${props.ingredient.id}`, body);
+            emit('saved', await api.put(`/api/ingredients/${props.ingredient.id}`, body));
         } else {
-            await api.post('/api/ingredients', body);
+            emit('saved', await api.post('/api/ingredients', body));
             toast.success(t('pantry.sheet.added', { name: body.name.trim() }));
         }
         if (another) {
@@ -141,7 +143,7 @@ async function remove() {
             <span v-if="editing" class="ingredient-sheet__delete">
                 <ConfirmButton :label="t('pantry.sheet.delete')" :title="t('pantry.sheet.deleteTitle', { name: ingredient.name })" :message="t('pantry.sheet.deleteMessage')" variant="danger" @confirm="remove" />
             </span>
-            <BaseButton v-if="!editing" variant="secondary" :disabled="saving" @click="save(true)">{{ t('pantry.sheet.saveAndAdd') }}</BaseButton>
+            <BaseButton v-if="!editing && allowAnother" variant="secondary" :disabled="saving" @click="save(true)">{{ t('pantry.sheet.saveAndAdd') }}</BaseButton>
             <BaseButton type="submit" form="ingredient-form" :loading="saving">{{ t('pantry.sheet.save') }}</BaseButton>
         </template>
     </BottomSheet>

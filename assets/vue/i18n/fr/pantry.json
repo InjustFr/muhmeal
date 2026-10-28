@@ -23,6 +23,14 @@
         "out": "Fini",
         "low": "Bientôt fini"
     },
+    "picker": {
+        "add": "Ajouter un ingrédient",
+        "search": "Chercher un ingrédient",
+        "close": "Fermer la recherche",
+        "left": "{amount} en stock",
+        "none": "Aucun ingrédient ne correspond",
+        "create": "Ajouter « {name} »"
+    },
     "row": {
         "increase": "Un de plus : {name}",
         "decrease": "Un de moins : {name}",

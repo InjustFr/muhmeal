@@ -1,21 +1,30 @@
 <script setup>
+import { computed } from 'vue';
 import { ToggleGroupItem, ToggleGroupRoot } from 'reka-ui';
 
 const props = defineProps({
     options: { type: Array, required: true },
     label: { type: String, required: true },
     variant: { type: String, default: 'chips' },
+    multiple: { type: Boolean, default: false },
 });
-const model = defineModel({ type: [String, Number], required: true });
+const model = defineModel({ type: [String, Number, Array], required: true });
+
+const selected = computed(() => (props.multiple ? model.value.map(String) : String(model.value)));
 
 function choose(key) {
+    if (props.multiple) {
+        const next = props.options.filter((candidate) => key.includes(String(candidate.value))).map((candidate) => candidate.value);
+        if (next.length > 0) model.value = next;
+        return;
+    }
     const option = props.options.find((candidate) => String(candidate.value) === key);
     if (option) model.value = option.value;
 }
 </script>
 
 <template>
-    <ToggleGroupRoot type="single" :model-value="String(model)" :aria-label="label" :class="['chips', `chips--${variant}`]" @update:model-value="choose">
+    <ToggleGroupRoot :type="multiple ? 'multiple' : 'single'" :model-value="selected" :aria-label="label" :class="['chips', `chips--${variant}`]" @update:model-value="choose">
         <ToggleGroupItem v-for="option in options" :key="option.value" :value="String(option.value)" :aria-label="option.ariaLabel" class="chips__item">
             <component :is="option.icon" v-if="option.icon" class="chips__icon" size="1.125rem" weight="bold" aria-hidden="true" />
             <span>{{ option.label }}</span>

@@ -1,15 +1,19 @@
 <script setup>
+import { RouterLink } from 'vue-router';
+
 defineProps({
     variant: { type: String, default: 'primary' },
     type: { type: String, default: 'button' },
     loading: { type: Boolean, default: false },
     disabled: { type: Boolean, default: false },
     href: { type: String, default: null },
+    to: { type: [String, Object], default: null },
 });
 </script>
 
 <template>
-    <a v-if="href" :href="href" :class="['button', `button--${variant}`]"><slot /></a>
+    <RouterLink v-if="to" :to="to" :class="['button', `button--${variant}`]"><slot /></RouterLink>
+    <a v-else-if="href" :href="href" :class="['button', `button--${variant}`]"><slot /></a>
     <button v-else :type="type" :class="['button', `button--${variant}`]" :disabled="disabled || loading" :aria-busy="loading || undefined">
         <span v-if="loading" class="button__spinner" aria-hidden="true" />
         <slot />

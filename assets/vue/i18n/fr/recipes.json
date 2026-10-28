@@ -2,5 +2,68 @@
     "empty": {
         "title": "Aucune recette pour l’instant",
         "hint": "Écrivez votre première recette et voyez d’un coup d’œil quand vous avez tout ce qu’il faut."
+    },
+    "new": "Nouvelle recette",
+    "badge": {
+        "meal": "Repas",
+        "prep": "Préparation"
+    },
+    "status": {
+        "ready": "Réalisable",
+        "missing": "Manque {count}"
+    },
+    "card": {
+        "more": "+{count}"
+    },
+    "page": {
+        "back": "Toutes les recettes",
+        "ingredients": "Ingrédients",
+        "have": "Vous avez",
+        "need": "Il faut",
+        "some": "Un peu",
+        "byHand": "Suivi à la main",
+        "makes": "Donne {amount} {name}",
+        "cookIt": "Cuisiner",
+        "makeIt": "Préparer",
+        "edit": "Modifier",
+        "short": "Il manque : {names}. Vous pouvez quand même continuer : le stock n’est qu’une estimation.",
+        "notFound": {
+            "title": "Cette recette a disparu",
+            "hint": "Elle a peut-être été supprimée depuis un autre téléphone."
+        }
+    },
+    "edit": {
+        "titleNew": "Nouvelle recette",
+        "titleEdit": "Modifier la recette",
+        "name": "Nom",
+        "kind": {
+            "label": "Elle donne",
+            "meal": "Un repas",
+            "prep": "Une préparation"
+        },
+        "lines": "Ingrédients",
+        "noLines": "Ajoutez les ingrédients dont la recette a besoin.",
+        "amount": "Quantité",
+        "some": "Un peu",
+        "amountOf": "Quantité de {name}",
+        "whole": "Unités entières de {name}",
+        "fraction": "Et un peu plus de {name}",
+        "more": "Plus de {name}",
+        "less": "Moins de {name}",
+        "remove": "Retirer {name}",
+        "output": "L’ingrédient qu’elle donne",
+        "outputHint": "Faire la préparation ajoute sa production au stock de cet ingrédient.",
+        "pickOutput": "Choisir l’ingrédient obtenu",
+        "clearOutput": "Changer {name}",
+        "yield": "Production",
+        "yieldMore": "Produire plus",
+        "yieldLess": "Produire moins",
+        "yieldFraction": "Et un peu plus",
+        "save": "Enregistrer la recette",
+        "saved": "{name} enregistrée",
+        "delete": "Supprimer",
+        "deleteTitle": "Supprimer {name} ?",
+        "deleteMessage": "La recette est supprimée. Vos ingrédients et vos repas passés restent tels quels.",
+        "deleted": "Recette supprimée"
     }
 }

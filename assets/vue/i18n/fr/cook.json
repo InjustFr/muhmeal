@@ -1,6 +1,18 @@
 {
     "empty": {
         "title": "Rien à cuisiner pour l’instant",
-        "hint": "Remplissez le frigo, le congélateur et le placard : les recettes réalisables tout de suite apparaîtront ici."
-    }
+        "hint": "Écrivez votre première recette : celles que vous pouvez faire tout de suite apparaîtront ici.",
+        "action": "Écrire une recette"
+    },
+    "noneReady": {
+        "title": "Rien n’est prêt à cuisiner",
+        "hint": "Remplissez les étagères, ou ouvrez une recette pour voir ce qui lui manque.",
+        "action": "Voir toutes les recettes"
+    },
+    "ready": "Prêt à cuisiner",
+    "preps": "Préparations possibles",
+    "logMeal": "Noter un repas",
+    "cookIt": "Cuisiner",
+    "makeIt": "Préparer",
+    "low": "{count} bientôt fini(s)"
 }

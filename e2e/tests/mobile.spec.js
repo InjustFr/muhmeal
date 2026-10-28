@@ -48,3 +48,37 @@ test('the pantry rows and the ingredient sheet fit a phone', async ({ page }) =>
     expect(width).toBe(viewport.width);
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBeTruthy();
 });
+
+test('the Cook page and the meal sheet fit a phone', async ({ page }) => {
+    await signIn(page);
+    const card = page.getByTestId('recipe-card').filter({ has: page.getByRole('link', { name: 'Pasta al pomodoro', exact: true }) });
+    await expect(card).toBeVisible();
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBeTruthy();
+
+    for (const name of ['Cook it: Pasta al pomodoro', 'Log a meal']) {
+        const { width, height } = await page.getByRole('button', { name }).boundingBox();
+        expect(height, name).toBeGreaterThanOrEqual(44);
+        expect(width, name).toBeGreaterThanOrEqual(44);
+    }
+
+    await page.getByRole('button', { name: 'Cook it: Pasta al pomodoro' }).click();
+    const sheet = page.getByRole('dialog', { name: 'Cook Pasta al pomodoro' });
+    await expect(sheet.getByTestId('used-line')).toHaveCount(5);
+    const viewport = page.viewportSize();
+    await expect.poll(async () => {
+        const { y, height } = await sheet.boundingBox();
+        return Math.round(y + height);
+    }).toBe(viewport.height);
+    const { x, width } = await sheet.boundingBox();
+    expect(x).toBe(0);
+    expect(width).toBe(viewport.width);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBeTruthy();
+
+    for (const name of ['More Pasta', 'Less Pasta']) {
+        const { width: buttonWidth, height: buttonHeight } = await sheet.getByRole('button', { name, exact: true }).boundingBox();
+        expect(buttonHeight, name).toBeGreaterThanOrEqual(44);
+        expect(buttonWidth, name).toBeGreaterThanOrEqual(44);
+    }
+    await sheet.getByTestId('submit-meal').scrollIntoViewIfNeeded();
+    await expect(sheet.getByTestId('submit-meal')).toBeInViewport();
+});

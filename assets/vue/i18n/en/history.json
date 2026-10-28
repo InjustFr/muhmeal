@@ -2,5 +2,22 @@
     "empty": {
         "title": "No meals yet",
         "hint": "The meals you cook or log will be listed here, day by day."
+    },
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "eaters": "Who ate",
+    "loadOlder": "Load older meals",
+    "lines": {
+        "show": "Ingredients ({count})",
+        "hide": "Hide ingredients"
+    },
+    "delete": {
+        "label": "Delete {name}",
+        "title": "Delete this meal?",
+        "message": "“{name}” is removed from the history.",
+        "putBack": "Put ingredients back",
+        "putBackHint": "Adds what the meal used to the stock again.",
+        "confirm": "Delete",
+        "done": "Meal deleted"
     }
 }

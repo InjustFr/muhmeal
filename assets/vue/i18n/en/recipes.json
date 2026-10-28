@@ -2,5 +2,68 @@
     "empty": {
         "title": "No recipes yet",
         "hint": "Write your first recipe and see at a glance when you have everything it needs."
+    },
+    "new": "New recipe",
+    "badge": {
+        "meal": "Meal",
+        "prep": "Prep"
+    },
+    "status": {
+        "ready": "Can cook",
+        "missing": "Missing {count}"
+    },
+    "card": {
+        "more": "+{count}"
+    },
+    "page": {
+        "back": "All recipes",
+        "ingredients": "Ingredients",
+        "have": "You have",
+        "need": "Needs",
+        "some": "Some",
+        "byHand": "Tracked by hand",
+        "makes": "Makes {amount} {name}",
+        "cookIt": "Cook it",
+        "makeIt": "Make it",
+        "edit": "Edit",
+        "short": "Short on {names}. You can still go ahead: the stock is only an estimate.",
+        "notFound": {
+            "title": "This recipe is gone",
+            "hint": "It may have been deleted on another phone."
+        }
+    },
+    "edit": {
+        "titleNew": "New recipe",
+        "titleEdit": "Edit recipe",
+        "name": "Name",
+        "kind": {
+            "label": "It makes",
+            "meal": "A meal",
+            "prep": "A prep"
+        },
+        "lines": "Ingredients",
+        "noLines": "Add the ingredients the recipe needs.",
+        "amount": "Amount",
+        "some": "Some",
+        "amountOf": "How much {name}",
+        "whole": "Whole units of {name}",
+        "fraction": "And a bit more of {name}",
+        "more": "More {name}",
+        "less": "Less {name}",
+        "remove": "Remove {name}",
+        "output": "The ingredient it makes",
+        "outputHint": "Making the prep adds its yield to the stock of this ingredient.",
+        "pickOutput": "Pick the ingredient it makes",
+        "clearOutput": "Change {name}",
+        "yield": "Yield",
+        "yieldMore": "Make more",
+        "yieldLess": "Make less",
+        "yieldFraction": "And a bit more",
+        "save": "Save recipe",
+        "saved": "{name} saved",
+        "delete": "Delete",
+        "deleteTitle": "Delete {name}?",
+        "deleteMessage": "The recipe is removed. Your ingredients and past meals stay as they are.",
+        "deleted": "Recipe deleted"
     }
 }

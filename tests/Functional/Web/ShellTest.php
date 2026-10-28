@@ -31,8 +31,11 @@ final class ShellTest extends WebTestCase
         self::assertResponseRedirects('/login');
     }
 
+    /**
+     * @param list<string> $preloaded
+     */
     #[DataProvider('tabs')]
-    public function testEveryTabGetsTheShell(string $path): void
+    public function testEveryTabGetsTheShellAndTheDataItLoads(string $path, array $preloaded): void
     {
         $client = self::signedInClient();
 
@@ -40,7 +43,18 @@ final class ShellTest extends WebTestCase
 
         self::assertResponseIsSuccessful();
         self::assertCount(1, $crawler->filter('#app'));
-        self::assertSame(['/api/ingredients' => []], Json::decode($crawler->filter('#app-preload')->text()));
+        self::assertSame(['/api/ingredients', ...$preloaded], array_keys(Json::decode($crawler->filter('#app-preload')->text())));
+    }
+
+    public function testTheCookPageCarriesTheRecipesAndTheHistoryTheMeals(): void
+    {
+        $client = self::signedInClient();
+
+        $cook = Json::decode($client->request('GET', '/')->filter('#app-preload')->text());
+        $history = Json::decode($client->request('GET', '/history')->filter('#app-preload')->text());
+
+        self::assertSame([], Json::array($cook, '/api/recipes'));
+        self::assertSame(['meals' => [], 'before' => null], Json::array($history, '/api/meals'));
     }
 
     public function testTheIngredientsTravelWithEveryPage(): void
@@ -54,16 +68,20 @@ final class ShellTest extends WebTestCase
         self::assertSame(['Milk'], array_column(Json::array($preload, '/api/ingredients'), 'name'));
     }
 
-    /** @return iterable<array{string}> */
+    /** @return iterable<array{string, list<string>}> */
     public static function tabs(): iterable
     {
-        yield 'cook' => ['/'];
-        yield 'pantry' => ['/pantry'];
-        yield 'recipes' => ['/recipes'];
-        yield 'groceries' => ['/groceries'];
-        yield 'history' => ['/history'];
-        yield 'credits' => ['/credits'];
-        yield 'unknown page' => ['/nowhere'];
+        yield 'cook' => ['/', ['/api/recipes']];
+        yield 'pantry' => ['/pantry', []];
+        yield 'recipes' => ['/recipes', ['/api/recipes']];
+        yield 'new recipe' => ['/recipes/new', ['/api/recipes']];
+        yield 'a recipe' => ['/recipes/01JAAAAAAAAAAAAAAAAAAAAAAA', ['/api/recipes']];
+        yield 'edit a recipe' => ['/recipes/01JAAAAAAAAAAAAAAAAAAAAAAA/edit', ['/api/recipes']];
+        yield 'groceries' => ['/groceries', []];
+        yield 'history' => ['/history', ['/api/meals']];
+        yield 'credits' => ['/credits', []];
+        yield 'unknown page' => ['/nowhere', []];
+        yield 'unknown page starting like a tab' => ['/recipesnowhere', []];
     }
 
     public function testTheSessionCarriesTheUserAndTheMembersOfTheKitchen(): void

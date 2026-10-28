@@ -1,0 +1,54 @@
+{
+    "type": {
+        "label": "Which meal",
+        "breakfast": "Breakfast",
+        "lunch": "Lunch",
+        "dinner": "Dinner",
+        "snack": "Snack"
+    },
+    "day": {
+        "label": "Which day",
+        "today": "Today",
+        "yesterday": "Yesterday",
+        "other": "Another day"
+    },
+    "eaters": {
+        "label": "Who ate"
+    },
+    "title": {
+        "label": "Title",
+        "hint": "Optional when you list ingredients.",
+        "placeholder": "Takeaway pizza, leftovers…"
+    },
+    "lines": {
+        "label": "Ingredients used",
+        "empty": "No ingredient yet. Add what you used, or just give the meal a title.",
+        "notDeducted": "Not deducted",
+        "group": "Amount of {name}",
+        "less": "Less {name}",
+        "more": "More {name}",
+        "remove": "Remove {name}"
+    },
+    "sheet": {
+        "title": "Log a meal",
+        "cookTitle": "Cook {name}",
+        "submit": "Log meal"
+    },
+    "prep": {
+        "title": "Make {name}",
+        "makes": "Makes",
+        "made": "Amount made",
+        "less": "Make less",
+        "more": "Make more",
+        "submit": "Make it"
+    },
+    "done": {
+        "title": "Enjoy your meal!",
+        "prepTitle": "All done!",
+        "close": "Done"
+    },
+    "toast": {
+        "logged": "Meal logged",
+        "made": "{name} made"
+    }
+}

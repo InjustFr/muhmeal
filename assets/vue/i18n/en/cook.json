@@ -1,6 +1,18 @@
 {
     "empty": {
         "title": "Nothing to cook yet",
-        "hint": "Stock the fridge, freezer and pantry, then the recipes you can make right now will show up here."
-    }
+        "hint": "Write your first recipe, then the ones you can make right now will show up here.",
+        "action": "Write a recipe"
+    },
+    "noneReady": {
+        "title": "Nothing is ready to cook",
+        "hint": "Restock the shelves, or open a recipe to see what it is missing.",
+        "action": "See all recipes"
+    },
+    "ready": "Ready to cook",
+    "preps": "Preps you can make",
+    "logMeal": "Log a meal",
+    "cookIt": "Cook it",
+    "makeIt": "Make it",
+    "low": "{count} running low"
 }
