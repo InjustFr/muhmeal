@@ -77,7 +77,8 @@ final class ShellTest extends WebTestCase
         yield 'new recipe' => ['/recipes/new', ['/api/recipes']];
         yield 'a recipe' => ['/recipes/01JAAAAAAAAAAAAAAAAAAAAAAA', ['/api/recipes']];
         yield 'edit a recipe' => ['/recipes/01JAAAAAAAAAAAAAAAAAAAAAAA/edit', ['/api/recipes']];
-        yield 'groceries' => ['/groceries', []];
+        yield 'groceries' => ['/groceries', ['/api/grocery-list']];
+        yield 'put away' => ['/groceries/put-away', ['/api/grocery-list']];
         yield 'history' => ['/history', ['/api/meals']];
         yield 'credits' => ['/credits', []];
         yield 'unknown page' => ['/nowhere', []];

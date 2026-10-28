@@ -1,5 +1,5 @@
 shared:
-    not_found: 'This {subject, select, user {person} ingredient {ingredient} recipe {recipe} meal {meal} other {item}} no longer exists.'
+    not_found: 'This {subject, select, user {person} ingredient {ingredient} recipe {recipe} meal {meal} grocery_list {grocery list} grocery_item {grocery item} other {item}} no longer exists.'
     invalid_day: '“{day}” is not a valid date.'
 user:
     invalid_email: '“{email}” is not a valid email address.'
@@ -25,3 +25,6 @@ meal:
     needs_eater: 'Someone has to eat the meal.'
     empty: 'Give the meal a title or at least one ingredient.'
     title_too_long: 'A meal title has at most {max} characters.'
+groceries:
+    already_open: 'A shopping trip is already open. Finish it first.'
+    empty: 'Pick at least one ingredient to shop for.'

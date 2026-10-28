@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Application\Pantry\AddIngredient;
 
 use App\Application\Pantry\IngredientView;
+use App\Application\Pantry\IngredientViews;
 use App\Application\Transaction;
 use App\Domain\Pantry\Exception\IngredientNameTaken;
 use App\Domain\Pantry\Ingredient;
@@ -16,6 +17,7 @@ final readonly class AddIngredientHandler
 {
     public function __construct(
         private IngredientRepository $ingredients,
+        private IngredientViews $views,
         private ClockInterface $clock,
         private Transaction $transaction,
     ) {
@@ -39,6 +41,6 @@ final readonly class AddIngredientHandler
         $this->ingredients->add($ingredient);
         $this->transaction->commit();
 
-        return IngredientView::of($ingredient);
+        return $this->views->of($ingredient);
     }
 }

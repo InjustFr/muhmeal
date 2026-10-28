@@ -37,6 +37,7 @@ final class AppShellController extends AbstractController
         return match (true) {
             '' === $path, 'recipes' === $path, str_starts_with($path, 'recipes/') => ['/api/recipes'],
             'history' === $path => ['/api/meals'],
+            'groceries' === $path, 'groceries/put-away' === $path => ['/api/grocery-list'],
             default => [],
         };
     }

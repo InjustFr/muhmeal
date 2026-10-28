@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Application\Pantry\AdjustStock;
 
 use App\Application\Pantry\IngredientView;
+use App\Application\Pantry\IngredientViews;
 use App\Application\Transaction;
 use App\Domain\Pantry\IngredientRepository;
 
@@ -12,6 +13,7 @@ final readonly class AdjustStockHandler
 {
     public function __construct(
         private IngredientRepository $ingredients,
+        private IngredientViews $views,
         private Transaction $transaction,
     ) {
     }
@@ -22,6 +24,6 @@ final readonly class AdjustStockHandler
         $ingredient->adjust($command->by);
         $this->transaction->commit();
 
-        return IngredientView::of($ingredient);
+        return $this->views->of($ingredient);
     }
 }

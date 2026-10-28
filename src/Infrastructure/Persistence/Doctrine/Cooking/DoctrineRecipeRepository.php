@@ -63,4 +63,17 @@ final readonly class DoctrineRecipeRepository implements RecipeRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function outputIds(): array
+    {
+        return array_map(
+            static fn (Ingredient $output): Ulid => $output->id(),
+            $this->entityManager->createQueryBuilder()
+                ->select('o')
+                ->from(Ingredient::class, 'o')
+                ->where('EXISTS (SELECT r.id FROM '.Recipe::class.' r WHERE r.output = o)')
+                ->getQuery()
+                ->getResult(),
+        );
+    }
 }

@@ -12,6 +12,7 @@ import IngredientSheet from './IngredientSheet.vue';
 const props = defineProps({
     exclude: { type: Array, default: () => [] },
     label: { type: String, default: null },
+    initialStock: { type: Number, default: undefined },
 });
 const emit = defineEmits(['pick']);
 
@@ -82,7 +83,7 @@ const quantityOf = (ingredient) => describeQuantity(ingredient.stock, ingredient
                 </li>
             </ul>
         </div>
-        <IngredientSheet v-model:open="sheet.open" :initial-name="sheet.name" :allow-another="false" @saved="pick" />
+        <IngredientSheet v-model:open="sheet.open" :initial-name="sheet.name" :initial-stock="initialStock" :allow-another="false" @saved="pick" />
     </div>
 </template>
 

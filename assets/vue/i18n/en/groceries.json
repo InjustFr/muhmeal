@@ -1,6 +1,46 @@
 {
-    "empty": {
-        "title": "The list is empty",
-        "hint": "Start a shopping trip when the stock runs low."
+    "prepare": {
+        "hint": "What is running low is ticked. Untick what you can skip, add what you fancy.",
+        "section": "To buy",
+        "empty": {
+            "title": "Nothing is running low",
+            "hint": "Add what you need and start shopping."
+        },
+        "add": "Add an ingredient",
+        "start": "Start shopping",
+        "starting": "Shopping trip started"
+    },
+    "row": {
+        "out": "Out",
+        "left": "{amount} left"
+    },
+    "shop": {
+        "startedBy": "Started by {name}",
+        "progress": "{done} of {total} ticked",
+        "add": "Add",
+        "backHome": "Back home",
+        "empty": {
+            "title": "The list is empty",
+            "hint": "Add something, or head back home."
+        }
+    },
+    "putAway": {
+        "title": "Put away",
+        "hint": "Check what you bought and put it away. The amounts are added to the stock.",
+        "back": "Back to the list",
+        "nothing": {
+            "title": "Nothing ticked",
+            "hint": "Nothing will be added to the stock. You can still add what you bought below."
+        },
+        "group": "Amount of {name} bought",
+        "less": "Buy less {name}",
+        "more": "Buy more {name}",
+        "none": "Nothing added",
+        "notBoughtShow": "Not bought ({count})",
+        "notBoughtHide": "Hide what was not bought",
+        "notBoughtHint": "Tick anything you did buy after all.",
+        "add": "Add anything",
+        "done": "Done",
+        "toast": "Groceries put away"
     }
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Application\Pantry;
 
+use App\Domain\Groceries\Suggestion;
 use App\Domain\Pantry\Ingredient;
 
 final readonly class IngredientView
@@ -18,10 +19,12 @@ final readonly class IngredientView
         public int $lowAt,
         public bool $runningLow,
         public bool $out,
+        public bool $homemade,
+        public bool $suggested,
     ) {
     }
 
-    public static function of(Ingredient $ingredient): self
+    public static function of(Ingredient $ingredient, Suggestion $suggestion): self
     {
         return new self(
             (string) $ingredient->id(),
@@ -33,6 +36,8 @@ final readonly class IngredientView
             $ingredient->lowAt()->twelfths(),
             $ingredient->isRunningLow(),
             $ingredient->isOut(),
+            $suggestion->isHomemade($ingredient),
+            $suggestion->suggests($ingredient),
         );
     }
 }

@@ -15,6 +15,8 @@ use App\Domain\Cooking\Exception\RecipeNameTooLong;
 use App\Domain\Cooking\Exception\RecipeNeedsIngredient;
 use App\Domain\Cooking\Exception\ZeroQuantity;
 use App\Domain\Cooking\Exception\ZeroYield;
+use App\Domain\Groceries\Exception\EmptyGroceryList;
+use App\Domain\Groceries\Exception\GroceryListAlreadyOpen;
 use App\Domain\Identity\Exception\EmailAlreadyTaken;
 use App\Domain\Identity\Exception\EmptyDisplayName;
 use App\Domain\Identity\Exception\InvalidEmail;
@@ -49,7 +51,9 @@ final class ExceptionMessagesTest extends KernelTestCase
         yield 'missing ingredient' => [new NotFound('ingredient', 'abc'), 'This ingredient no longer exists.', 'Cet ingrédient n’existe plus.'];
         yield 'missing recipe' => [new NotFound('recipe', 'abc'), 'This recipe no longer exists.', 'Cette recette n’existe plus.'];
         yield 'missing meal' => [new NotFound('meal', 'abc'), 'This meal no longer exists.', 'Ce repas n’existe plus.'];
-        yield 'missing anything else' => [new NotFound('grocery list', 'abc'), 'This item no longer exists.', 'Cet élément n’existe plus.'];
+        yield 'missing grocery list' => [new NotFound('grocery_list', 'open'), 'This grocery list no longer exists.', 'Cette liste de courses n’existe plus.'];
+        yield 'missing grocery item' => [new NotFound('grocery_item', 'abc'), 'This grocery item no longer exists.', 'Cet article n’existe plus.'];
+        yield 'missing anything else' => [new NotFound('widget', 'abc'), 'This item no longer exists.', 'Cet élément n’existe plus.'];
         yield 'invalid email' => [new InvalidEmail('lou'), '“lou” is not a valid email address.', '« lou » n’est pas une adresse e-mail valide.'];
         yield 'empty display name' => [new EmptyDisplayName(), 'Tell us what to call you.', 'Dites-nous comment vous appeler.'];
         yield 'email taken' => [new EmailAlreadyTaken('lou@example.com'), 'An account already uses lou@example.com. Sign in instead.', 'Un compte utilise déjà lou@example.com. Connectez-vous plutôt.'];
@@ -68,6 +72,8 @@ final class ExceptionMessagesTest extends KernelTestCase
         yield 'not a prep' => [new NotAPrep('Pasta'), '“Pasta” makes a meal, not an ingredient.', '« Pasta » fait un repas, pas un ingrédient.'];
         yield 'meal without eater' => [new MealNeedsEater(), 'Someone has to eat the meal.', 'Quelqu’un doit manger ce repas.'];
         yield 'empty meal' => [new EmptyMeal(), 'Give the meal a title or at least one ingredient.', 'Donnez un titre au repas ou au moins un ingrédient.'];
+        yield 'grocery list already open' => [new GroceryListAlreadyOpen(), 'A shopping trip is already open. Finish it first.', 'Une course est déjà ouverte. Terminez-la d’abord.'];
+        yield 'empty grocery list' => [new EmptyGroceryList(), 'Pick at least one ingredient to shop for.', 'Choisissez au moins un ingrédient à acheter.'];
         yield 'long meal title' => [new MealTitleTooLong(80), 'A meal title has at most 80 characters.', 'Un titre de repas compte au plus 80 caractères.'];
     }
 }

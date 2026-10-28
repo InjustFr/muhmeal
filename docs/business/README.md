@@ -13,5 +13,6 @@
 | Prep, output, yield, make | `Domain\Cooking\Recipe::make`, `Application\Cooking\MakePrep` | [cooking.md](cooking.md) |
 | Meal, eater, cook it, log a meal | `Domain\Cooking\{Meal, MealLine, Portion}`, `Application\Cooking\LogMeal` | [cooking.md](cooking.md) |
 | History, delete a meal, put ingredients back | `Application\Cooking\{MealHistory, RemoveMeal}` | [cooking.md](cooking.md) |
-
-The Groceries page is added with its feature.
+| Groceries, shopping trip, suggested, homemade | `Domain\Groceries\{GroceryList, GroceryItem, Suggestion}`, `Application\Groceries\*` | [groceries.md](groceries.md) |
+| Prepare, shop, tick, put away, not bought | `Application\Groceries\{StartGroceryList, TickGroceryItem, PutAwayGroceries}`, `GroceriesPage`, `PutAwayPage` | [groceries.md](groceries.md) |
+| Android app | `MainActivity`, `Hosts` | [apps.md](apps.md) |

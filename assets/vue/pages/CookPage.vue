@@ -26,7 +26,7 @@ const prepSheet = reactive({ open: false, recipeId: null });
 
 const meals = computed(() => recipes.value.filter((recipe) => recipe.makes === 'meal' && recipe.makeable));
 const preps = computed(() => recipes.value.filter((recipe) => recipe.makes === 'prep' && recipe.makeable));
-const runningLow = computed(() => ingredients.value.filter((ingredient) => ingredient.runningLow).length);
+const runningLow = computed(() => ingredients.value.filter((ingredient) => ingredient.suggested).length);
 const prep = computed(() => recipes.value.find((recipe) => recipe.id === prepSheet.recipeId) ?? null);
 
 function logMeal() {

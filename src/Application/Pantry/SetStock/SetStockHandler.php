@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Application\Pantry\SetStock;
 
 use App\Application\Pantry\IngredientView;
+use App\Application\Pantry\IngredientViews;
 use App\Application\Transaction;
 use App\Domain\Pantry\IngredientRepository;
 use App\Domain\Pantry\Quantity;
@@ -13,6 +14,7 @@ final readonly class SetStockHandler
 {
     public function __construct(
         private IngredientRepository $ingredients,
+        private IngredientViews $views,
         private Transaction $transaction,
     ) {
     }
@@ -23,6 +25,6 @@ final readonly class SetStockHandler
         $ingredient->setStock(Quantity::ofTwelfths($command->stock));
         $this->transaction->commit();
 
-        return IngredientView::of($ingredient);
+        return $this->views->of($ingredient);
     }
 }

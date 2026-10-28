@@ -5,14 +5,16 @@ declare(strict_types=1);
 namespace App\Infrastructure\Persistence\Doctrine\Pantry;
 
 use App\Application\Pantry\IngredientQueries;
-use App\Application\Pantry\IngredientView;
+use App\Application\Pantry\IngredientViews;
 use App\Domain\Pantry\Ingredient;
 use Doctrine\ORM\EntityManagerInterface;
 
 final readonly class DoctrineIngredientQueries implements IngredientQueries
 {
-    public function __construct(private EntityManagerInterface $entityManager)
-    {
+    public function __construct(
+        private EntityManagerInterface $entityManager,
+        private IngredientViews $views,
+    ) {
     }
 
     public function all(): array
@@ -25,6 +27,6 @@ final readonly class DoctrineIngredientQueries implements IngredientQueries
             ->getQuery()
             ->getResult();
 
-        return array_map(IngredientView::of(...), $ingredients);
+        return $this->views->all($ingredients);
     }
 }

@@ -82,3 +82,41 @@ test('the Cook page and the meal sheet fit a phone', async ({ page }) => {
     await sheet.getByTestId('submit-meal').scrollIntoViewIfNeeded();
     await expect(sheet.getByTestId('submit-meal')).toBeInViewport();
 });
+
+test('the shop screen fits a phone with big tap targets', async ({ page }) => {
+    await signIn(page);
+    const send = (method, url, body) => page.evaluate(async (request) => {
+        const response = await fetch(request.url, { method: request.method, headers: { Accept: 'application/json', 'Content-Type': 'application/json' }, body: request.body ? JSON.stringify(request.body) : undefined });
+        return response.status === 204 ? null : response.json();
+    }, { method, url, body });
+    if ((await send('GET', '/api/grocery-list')) !== null) await send('POST', '/api/grocery-list/put-away', { bought: [] });
+    const ingredients = await send('GET', '/api/ingredients');
+    const ids = ['Yoghurt', 'Cheddar', 'Rice', 'Peas'].map((name) => ingredients.find((ingredient) => ingredient.name === name).id);
+    await send('POST', '/api/grocery-list', { ingredientIds: ids });
+
+    await page.getByRole('navigation', { name: 'Main' }).getByRole('link', { name: 'Groceries' }).click();
+    const rows = page.getByTestId('tick-row');
+    await expect(rows).toHaveCount(4);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBeTruthy();
+
+    const viewport = page.viewportSize();
+    for (const row of await rows.all()) {
+        const { x, width, height } = await row.boundingBox();
+        expect(height).toBeGreaterThanOrEqual(44);
+        expect(x).toBeGreaterThanOrEqual(0);
+        expect(x + width).toBeLessThanOrEqual(viewport.width);
+    }
+
+    await rows.filter({ hasText: 'Yoghurt' }).click();
+    await expect(rows.filter({ hasText: 'Yoghurt' })).toHaveAttribute('aria-checked', 'true');
+    await expect(page.locator('section').filter({ has: page.getByRole('heading', { level: 2, name: /^Fridge/ }) }).getByTestId('tick-row').last()).toContainText('Yoghurt');
+
+    const home = page.getByTestId('back-home');
+    await home.scrollIntoViewIfNeeded();
+    const { height, width } = await home.boundingBox();
+    expect(height).toBeGreaterThanOrEqual(44);
+    expect(width).toBeGreaterThanOrEqual(44);
+    await expect(home).toBeInViewport();
+
+    await send('POST', '/api/grocery-list/put-away', { bought: [] });
+});

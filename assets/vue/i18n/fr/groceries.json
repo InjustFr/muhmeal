@@ -1,6 +1,46 @@
 {
-    "empty": {
-        "title": "La liste est vide",
-        "hint": "Lancez une course quand le stock baisse."
+    "prepare": {
+        "hint": "Ce qui manque est coché. Décochez ce que vous pouvez laisser, ajoutez ce qui vous fait envie.",
+        "section": "À acheter",
+        "empty": {
+            "title": "Rien ne manque",
+            "hint": "Ajoutez ce qu’il vous faut et lancez les courses."
+        },
+        "add": "Ajouter un ingrédient",
+        "start": "Commencer les courses",
+        "starting": "Courses lancées"
+    },
+    "row": {
+        "out": "Épuisé",
+        "left": "{amount} en stock"
+    },
+    "shop": {
+        "startedBy": "Lancées par {name}",
+        "progress": "{done} sur {total} cochés",
+        "add": "Ajouter",
+        "backHome": "De retour à la maison",
+        "empty": {
+            "title": "La liste est vide",
+            "hint": "Ajoutez quelque chose, ou rentrez à la maison."
+        }
+    },
+    "putAway": {
+        "title": "Ranger",
+        "hint": "Vérifiez ce que vous avez acheté et rangez-le. Les quantités sont ajoutées au stock.",
+        "back": "Retour à la liste",
+        "nothing": {
+            "title": "Rien de coché",
+            "hint": "Rien ne sera ajouté au stock. Vous pouvez encore ajouter ci-dessous ce que vous avez acheté."
+        },
+        "group": "Quantité achetée de {name}",
+        "less": "Acheter moins de {name}",
+        "more": "Acheter plus de {name}",
+        "none": "Rien d’ajouté",
+        "notBoughtShow": "Pas acheté ({count})",
+        "notBoughtHide": "Masquer ce qui n’a pas été acheté",
+        "notBoughtHint": "Cochez ce que vous avez finalement acheté.",
+        "add": "Ajouter autre chose",
+        "done": "Terminé",
+        "toast": "Courses rangées"
     }
 }

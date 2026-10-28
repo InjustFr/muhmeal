@@ -21,4 +21,9 @@ interface RecipeRepository
      * @return list<Recipe>
      */
     public function using(Ingredient $ingredient): array;
+
+    /**
+     * @return list<Ulid>
+     */
+    public function outputIds(): array;
 }

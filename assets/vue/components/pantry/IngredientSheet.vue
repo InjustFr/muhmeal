@@ -19,6 +19,7 @@ const props = defineProps({
     ingredient: { type: Object, default: null },
     initialName: { type: String, default: '' },
     initialLocation: { type: String, default: 'pantry' },
+    initialStock: { type: Number, default: TWELFTHS_PER_UNIT },
     allowAnother: { type: Boolean, default: true },
 });
 const open = defineModel('open', { type: Boolean, required: true });
@@ -33,7 +34,7 @@ const location = ref('pantry');
 const unit = ref('piece');
 const manual = ref(false);
 const lowAt = ref(defaultLowAt('piece'));
-const whole = ref(TWELFTHS_PER_UNIT);
+const whole = ref(props.initialStock);
 const fraction = ref(0);
 const nameError = ref(null);
 const saving = ref(false);
@@ -61,7 +62,7 @@ watch(open, (isOpen) => {
 });
 
 function resetStock() {
-    whole.value = TWELFTHS_PER_UNIT;
+    whole.value = props.initialStock;
     fraction.value = 0;
 }
 
