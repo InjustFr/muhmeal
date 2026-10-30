@@ -53,6 +53,17 @@ test('what is running low is suggested, out of stock first, and a homemade ingre
 
 });
 
+test('an ingredient bought in no month is never suggested', async ({ page }) => {
+    const sodas = unique('Sodas');
+    const item = await ingredient(page, sodas, { stock: 0 });
+    await api(page, 'PUT', `/api/ingredients/${item.id}`, { name: sodas, location: 'pantry', unit: 'piece', months: [] });
+
+    await goToGroceries(page);
+
+    await expect(page.getByTestId('start-shopping')).toBeVisible();
+    await expect(row(page, sodas)).toHaveCount(0);
+});
+
 test('the groceries open from the pantry and close without losing the choices', async ({ page }) => {
     await goToGroceries(page);
     await expect(page.getByRole('navigation', { name: 'Main' }).getByRole('link', { name: 'Pantry' })).toHaveClass(/shell__tab--active/);

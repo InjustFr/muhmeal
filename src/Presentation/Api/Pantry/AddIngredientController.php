@@ -11,12 +11,13 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Uid\Ulid;
 
 #[Route('/api/ingredients', name: 'api_ingredients_add', methods: ['POST'], format: 'json')]
 final class AddIngredientController extends AbstractController
 {
     public function __invoke(#[MapRequestPayload] AddIngredientPayload $payload, AddIngredientHandler $addIngredient): JsonResponse
     {
-        return $this->json($addIngredient(new AddIngredient($payload->name, $payload->location, $payload->unit, $payload->manual, $payload->lowAt, $payload->stock)), Response::HTTP_CREATED);
+        return $this->json($addIngredient(new AddIngredient($payload->name, $payload->location, $payload->unit, $payload->manual, $payload->lowAt, $payload->stock, $payload->months, null === $payload->variantOf ? null : Ulid::fromString($payload->variantOf))), Response::HTTP_CREATED);
     }
 }

@@ -14,10 +14,14 @@ export function lineFromIngredient(ingredient, amount = TWELFTHS_PER_UNIT) {
 }
 
 export function linesFromRecipe(recipe) {
-    return recipe.lines.map((line) => lineFromIngredient(
-        { id: line.ingredientId, name: line.name, unit: line.unit, manual: line.manual, stock: line.stock },
-        line.manual || line.amount === null ? 0 : line.amount,
-    ));
+    return recipe.lines.map((line) => {
+        const source = line.variant ?? line;
+
+        return lineFromIngredient(
+            { id: source.ingredientId, name: source.name, unit: source.unit, manual: source.manual, stock: source.stock },
+            source.manual || line.amount === null || source.unit !== line.unit ? 0 : line.amount,
+        );
+    });
 }
 
 export function withIngredient(lines, ingredient) {

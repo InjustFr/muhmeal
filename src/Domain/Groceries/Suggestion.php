@@ -15,7 +15,7 @@ final readonly class Suggestion
     /**
      * @param list<Ulid> $homemade
      */
-    public function __construct(array $homemade)
+    public function __construct(array $homemade, private int $month)
     {
         $this->homemade = array_fill_keys(array_map(static fn (Ulid $id): string => (string) $id, $homemade), true);
     }
@@ -27,6 +27,6 @@ final readonly class Suggestion
 
     public function suggests(Ingredient $ingredient): bool
     {
-        return $ingredient->isRunningLow() && !$this->isHomemade($ingredient);
+        return $ingredient->isRunningLow() && !$this->isHomemade($ingredient) && $ingredient->isBoughtIn($this->month);
     }
 }

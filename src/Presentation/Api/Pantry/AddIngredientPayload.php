@@ -12,6 +12,9 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 final readonly class AddIngredientPayload
 {
+    /**
+     * @param list<int> $months
+     */
     public function __construct(
         public Location $location,
         public Unit $unit,
@@ -23,6 +26,10 @@ final readonly class AddIngredientPayload
         public ?int $lowAt = null,
         #[Assert\Range(min: 0, max: Quantity::MAX_TWELFTHS, notInRangeMessage: 'quantity.range')]
         public int $stock = 0,
+        #[Assert\All([new Assert\Range(min: 1, max: 12, notInRangeMessage: 'month.range')])]
+        public array $months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+        #[Assert\Ulid(message: 'id.invalid')]
+        public ?string $variantOf = null,
     ) {
     }
 }

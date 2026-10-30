@@ -31,6 +31,7 @@ const summary = computed(() => {
             <div class="card__chips">
                 <span v-if="recipe.makes === 'prep'" class="card__chip card__chip--prep"><PhFlask size="0.875rem" weight="bold" aria-hidden="true" />{{ t('recipes.badge.prep') }}</span>
                 <span v-if="recipe.makeable" class="card__chip card__chip--ready"><PhCheckCircle size="0.875rem" weight="bold" aria-hidden="true" />{{ t('recipes.status.ready') }}</span>
+                <span v-else-if="recipe.missing.length === 0" class="card__chip card__chip--later" data-test="prep-first"><PhFlask size="0.875rem" weight="bold" aria-hidden="true" />{{ t('recipes.status.prepFirst', { names: recipe.preps.map((prep) => prep.name).join(', ') }) }}</span>
                 <span v-else class="card__chip card__chip--missing"><PhWarning size="0.875rem" weight="bold" aria-hidden="true" />{{ t('recipes.status.missing', { count: recipe.missing.length }, recipe.missing.length) }}</span>
             </div>
         </div>
@@ -49,5 +50,6 @@ const summary = computed(() => {
 .card__chip { display: inline-flex; align-items: center; gap: var(--space-1); padding: 0 var(--space-2); border-radius: var(--radius-pill); font-size: var(--font-size-xs); font-weight: 800; letter-spacing: var(--tracking-caps); text-transform: uppercase; }
 .card__chip--prep { background: var(--color-highlight-soft); color: var(--color-ink); }
 .card__chip--ready { background: var(--color-accent-soft); color: var(--color-accent-deep); }
+.card__chip--later { min-width: 0; background: var(--color-highlight-soft); color: var(--color-ink); letter-spacing: normal; text-transform: none; overflow-wrap: anywhere; }
 .card__chip--missing { background: var(--color-danger-soft); color: var(--color-danger); }
 </style>

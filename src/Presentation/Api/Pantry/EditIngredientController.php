@@ -18,6 +18,6 @@ final class EditIngredientController extends AbstractController
 {
     public function __invoke(Ulid $id, #[MapRequestPayload] IngredientPayload $payload, EditIngredientHandler $editIngredient): JsonResponse
     {
-        return $this->json($editIngredient(new EditIngredient($id, $payload->name, $payload->location, $payload->unit, $payload->manual, $payload->lowAt)));
+        return $this->json($editIngredient(new EditIngredient($id, $payload->name, $payload->location, $payload->unit, $payload->manual, $payload->lowAt, $payload->months, null === $payload->variantOf ? null : Ulid::fromString($payload->variantOf))));
     }
 }

@@ -9,6 +9,7 @@ use App\Application\Pantry\IngredientViews;
 use App\Application\Transaction;
 use App\Domain\Pantry\Exception\IngredientNameTaken;
 use App\Domain\Pantry\IngredientRepository;
+use App\Domain\Pantry\Months;
 use App\Domain\Pantry\Quantity;
 
 final readonly class EditIngredientHandler
@@ -34,6 +35,8 @@ final readonly class EditIngredientHandler
             $command->manual,
             null === $command->lowAt ? null : Quantity::ofTwelfths($command->lowAt),
         );
+        $ingredient->buyIn(Months::of($command->months));
+        $ingredient->makeVariantOf(null === $command->variantOf ? null : $this->ingredients->get($command->variantOf));
         $this->transaction->commit();
 
         return $this->views->of($ingredient);

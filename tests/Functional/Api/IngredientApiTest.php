@@ -100,6 +100,60 @@ final class IngredientApiTest extends WebTestCase
         yield 'a word' => [['stock' => 'plenty']];
     }
 
+    public function testMonthsAndVariantsAreSavedAndShown(): void
+    {
+        $client = self::signedInClient();
+        $client->jsonRequest('POST', '/api/ingredients', ['name' => 'Zucchini', 'location' => 'fridge', 'unit' => 'piece']);
+        $zucchini = self::body($client);
+        self::assertSame([range(1, 12), null], [$zucchini['months'], $zucchini['variantOf']]);
+        $zucchiniId = Json::string($zucchini, 'id');
+
+        $client->jsonRequest('POST', '/api/ingredients', ['name' => 'Frozen zucchini', 'location' => 'freezer', 'unit' => 'bag', 'months' => [11, 1, 12], 'variantOf' => $zucchiniId]);
+        self::assertResponseStatusCodeSame(201);
+        $frozen = self::body($client);
+        self::assertSame([[1, 11, 12], $zucchiniId], [$frozen['months'], $frozen['variantOf']]);
+        $frozenId = Json::string($frozen, 'id');
+
+        $client->jsonRequest('PUT', "/api/ingredients/$frozenId", ['name' => 'Frozen zucchini', 'location' => 'freezer', 'unit' => 'bag', 'months' => []]);
+        self::assertResponseIsSuccessful();
+        self::assertSame([[], null, false], [self::body($client)['months'], self::body($client)['variantOf'], self::body($client)['suggested']]);
+
+        $client->jsonRequest('DELETE', "/api/ingredients/$zucchiniId");
+        self::assertResponseStatusCodeSame(204);
+    }
+
+    public function testDeletingAMainIngredientFreesItsVariants(): void
+    {
+        $client = self::signedInClient();
+        $client->jsonRequest('POST', '/api/ingredients', ['name' => 'Zucchini', 'location' => 'fridge', 'unit' => 'piece']);
+        $zucchini = Json::string(self::body($client), 'id');
+        $client->jsonRequest('POST', '/api/ingredients', ['name' => 'Frozen zucchini', 'location' => 'freezer', 'unit' => 'bag', 'variantOf' => $zucchini]);
+
+        $client->jsonRequest('DELETE', "/api/ingredients/$zucchini");
+        self::assertResponseStatusCodeSame(204);
+
+        $client->jsonRequest('GET', '/api/ingredients');
+        self::assertSame([null], array_column(self::body($client), 'variantOf'));
+    }
+
+    public function testVariantsGoOneLevelDeep(): void
+    {
+        $client = self::signedInClient();
+        $client->jsonRequest('POST', '/api/ingredients', ['name' => 'Zucchini', 'location' => 'fridge', 'unit' => 'piece']);
+        $zucchini = Json::string(self::body($client), 'id');
+        $client->jsonRequest('POST', '/api/ingredients', ['name' => 'Frozen zucchini', 'location' => 'freezer', 'unit' => 'bag', 'variantOf' => $zucchini]);
+        $frozen = Json::string(self::body($client), 'id');
+
+        $client->jsonRequest('POST', '/api/ingredients', ['name' => 'Cheap zucchini', 'location' => 'freezer', 'unit' => 'bag', 'variantOf' => $frozen]);
+        self::assertResponseStatusCodeSame(422);
+
+        $client->jsonRequest('PUT', "/api/ingredients/$zucchini", ['name' => 'Zucchini', 'location' => 'fridge', 'unit' => 'piece', 'variantOf' => $zucchini]);
+        self::assertResponseStatusCodeSame(422);
+
+        $client->jsonRequest('POST', '/api/ingredients', ['name' => 'Ghost zucchini', 'location' => 'freezer', 'unit' => 'bag', 'variantOf' => self::UNKNOWN]);
+        self::assertResponseStatusCodeSame(404);
+    }
+
     public function testTheListIsSortedByNameIgnoringCase(): void
     {
         $client = self::signedInClient();
@@ -242,6 +296,10 @@ final class IngredientApiTest extends WebTestCase
         yield 'manual is not a flag' => [['name' => 'Rice', 'location' => 'pantry', 'unit' => 'piece', 'manual' => 'yes']];
         yield 'negative threshold' => [['name' => 'Rice', 'location' => 'pantry', 'unit' => 'piece', 'lowAt' => -1]];
         yield 'threshold above 999 units' => [['name' => 'Rice', 'location' => 'pantry', 'unit' => 'piece', 'lowAt' => 11989]];
+        yield 'month zero' => [['name' => 'Rice', 'location' => 'pantry', 'unit' => 'piece', 'months' => [0]]];
+        yield 'month thirteen' => [['name' => 'Rice', 'location' => 'pantry', 'unit' => 'piece', 'months' => [13]]];
+        yield 'months are not a list' => [['name' => 'Rice', 'location' => 'pantry', 'unit' => 'piece', 'months' => 'summer']];
+        yield 'malformed variant' => [['name' => 'Rice', 'location' => 'pantry', 'unit' => 'piece', 'variantOf' => 'rice']];
     }
 
     /**

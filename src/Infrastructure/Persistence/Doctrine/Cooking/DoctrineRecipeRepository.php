@@ -76,4 +76,21 @@ final readonly class DoctrineRecipeRepository implements RecipeRepository
                 ->getResult(),
         );
     }
+
+    public function preps(): array
+    {
+        return $this->entityManager->createQueryBuilder()
+            ->select('r', 'l', 'i', 'o', 'm', 'mv', 'iv')
+            ->from(Recipe::class, 'r')
+            ->join('r.output', 'o')
+            ->leftJoin('r.lines', 'l')
+            ->leftJoin('l.ingredient', 'i')
+            ->leftJoin('i.variantOf', 'm')
+            ->leftJoin('m.variants', 'mv')
+            ->leftJoin('i.variants', 'iv')
+            ->orderBy('LOWER(r.name)')
+            ->addOrderBy('r.id')
+            ->getQuery()
+            ->getResult();
+    }
 }

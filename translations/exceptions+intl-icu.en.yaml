@@ -11,6 +11,9 @@ ingredient:
     name_taken: 'There is already an ingredient called “{name}”.'
     quantity_out_of_range: 'A quantity goes from 0 to {max} units.'
     in_use: '“{name}” cannot be deleted: it is used by {recipes}.'
+    invalid_month: '{month} is not a month: a month goes from 1 to 12.'
+    variant_of_itself: '“{name}” cannot be a variant of itself.'
+    nested_variant: '“{name}” cannot be a variant: variants go one level deep, under a main ingredient.'
 recipe:
     empty_name: 'Give the recipe a name.'
     name_too_long: 'A recipe name has at most {max} characters.'

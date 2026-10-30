@@ -108,19 +108,6 @@ class Recipe
         $this->output->restock($made);
     }
 
-    /**
-     * @return list<RecipeLine>
-     */
-    public function missing(): array
-    {
-        return array_values(array_filter($this->lines(), static fn (RecipeLine $line): bool => !$line->isCovered()));
-    }
-
-    public function isMakeable(): bool
-    {
-        return [] === $this->missing();
-    }
-
     public function isPrep(): bool
     {
         return null !== $this->output;

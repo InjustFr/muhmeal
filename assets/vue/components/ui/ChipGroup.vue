@@ -7,6 +7,7 @@ const props = defineProps({
     label: { type: String, required: true },
     variant: { type: String, default: 'chips' },
     multiple: { type: Boolean, default: false },
+    allowNone: { type: Boolean, default: false },
 });
 const model = defineModel({ type: [String, Number, Array], required: true });
 
@@ -15,7 +16,7 @@ const selected = computed(() => (props.multiple ? model.value.map(String) : Stri
 function choose(key) {
     if (props.multiple) {
         const next = props.options.filter((candidate) => key.includes(String(candidate.value))).map((candidate) => candidate.value);
-        if (next.length > 0) model.value = next;
+        if (next.length > 0 || props.allowNone) model.value = next;
         return;
     }
     const option = props.options.find((candidate) => String(candidate.value) === key);

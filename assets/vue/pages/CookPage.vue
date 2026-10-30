@@ -26,6 +26,7 @@ const prepSheet = reactive({ open: false, recipeId: null });
 
 const meals = computed(() => recipes.value.filter((recipe) => recipe.makes === 'meal' && recipe.makeable));
 const preps = computed(() => recipes.value.filter((recipe) => recipe.makes === 'prep' && recipe.makeable));
+const later = computed(() => recipes.value.filter((recipe) => !recipe.makeable && recipe.missing.length === 0));
 const runningLow = computed(() => ingredients.value.filter((ingredient) => ingredient.suggested).length);
 const prep = computed(() => recipes.value.find((recipe) => recipe.id === prepSheet.recipeId) ?? null);
 
@@ -53,7 +54,7 @@ function make(recipe) {
         <EmptyState v-if="recipes.length === 0" :icon="PhCookingPot" :title="t('cook.empty.title')" :hint="t('cook.empty.hint')">
             <BaseButton to="/recipes/new">{{ t('cook.empty.action') }}</BaseButton>
         </EmptyState>
-        <EmptyState v-else-if="meals.length === 0 && preps.length === 0" :icon="PhCookingPot" :title="t('cook.noneReady.title')" :hint="t('cook.noneReady.hint')">
+        <EmptyState v-else-if="meals.length === 0 && preps.length === 0 && later.length === 0" :icon="PhCookingPot" :title="t('cook.noneReady.title')" :hint="t('cook.noneReady.hint')">
             <BaseButton to="/recipes" variant="secondary">{{ t('cook.noneReady.action') }}</BaseButton>
         </EmptyState>
 
@@ -66,6 +67,12 @@ function make(recipe) {
         <PageSection v-if="preps.length > 0" :title="t('cook.preps')" :count="preps.length">
             <ul class="cook__list">
                 <RecipeCard v-for="recipe in preps" :key="recipe.id" :recipe="recipe" :action-label="t('cook.makeIt')" @act="make(recipe)" />
+            </ul>
+        </PageSection>
+
+        <PageSection v-if="later.length > 0" :title="t('cook.later')" :count="later.length">
+            <ul class="cook__list">
+                <RecipeCard v-for="recipe in later" :key="recipe.id" :recipe="recipe" :action-label="t('cook.prepFirst')" @act="make(recipe.preps[0])" />
             </ul>
         </PageSection>
 

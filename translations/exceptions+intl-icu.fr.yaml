@@ -11,6 +11,9 @@ ingredient:
     name_taken: 'Il existe déjà un ingrédient nommé « {name} ».'
     quantity_out_of_range: 'Une quantité va de 0 à {max} unités.'
     in_use: '« {name} » ne peut pas être supprimé : il est utilisé par {recipes}.'
+    invalid_month: '{month} n’est pas un mois : un mois va de 1 à 12.'
+    variant_of_itself: '« {name} » ne peut pas être une variante de lui-même.'
+    nested_variant: '« {name} » ne peut pas être une variante : les variantes n’ont qu’un niveau, sous un ingrédient principal.'
 recipe:
     empty_name: 'Donnez un nom à la recette.'
     name_too_long: 'Un nom de recette compte au plus {max} caractères.'

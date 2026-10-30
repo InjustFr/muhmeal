@@ -67,7 +67,14 @@
         "added": "{name} added",
         "delete": "Delete",
         "deleteTitle": "Delete {name}?",
-        "deleteMessage": "The ingredient and its stock are removed. This cannot be undone."
+        "deleteMessage": "The ingredient and its stock are removed. This cannot be undone.",
+        "months": "Buy in",
+        "monthsHint": "Suggested for the groceries only in these months. None means never.",
+        "allYear": "All year",
+        "never": "Never",
+        "variantOf": "Variant of",
+        "variantOfHint": "A variant can stand in for its main ingredient in every recipe (frozen zucchini for zucchini).",
+        "noVariant": "None, it is its own ingredient"
     },
     "groceries": "Go shopping"
 }

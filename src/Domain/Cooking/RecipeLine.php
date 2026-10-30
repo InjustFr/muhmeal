@@ -48,11 +48,6 @@ class RecipeLine
         $this->position = $position;
     }
 
-    public function isCovered(): bool
-    {
-        return $this->ingredient->covers($this->amount());
-    }
-
     public function ingredient(): Ingredient
     {
         return $this->ingredient;

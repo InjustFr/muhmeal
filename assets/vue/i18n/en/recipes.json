@@ -10,7 +10,8 @@
     },
     "status": {
         "ready": "Can cook",
-        "missing": "Missing {count}"
+        "missing": "Missing {count}",
+        "prepFirst": "Make {names} first"
     },
     "card": {
         "more": "+{count}"
@@ -30,7 +31,9 @@
         "notFound": {
             "title": "This recipe is gone",
             "hint": "It may have been deleted on another phone."
-        }
+        },
+        "variant": "Using {name}",
+        "prepFirst": "Make {names} first, then everything is there."
     },
     "edit": {
         "titleNew": "New recipe",

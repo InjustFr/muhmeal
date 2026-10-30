@@ -96,41 +96,6 @@ final class RecipeTest extends TestCase
         new Need(self::ingredient('Pasta', 12), Quantity::zero());
     }
 
-    public function testMissingListsTheLinesTheStockDoesNotCover(): void
-    {
-        $pasta = self::ingredient('Pasta', 12);
-        $tomatoes = self::ingredient('Tomatoes', 24);
-        $cheese = self::ingredient('Cheese', 0);
-        $recipe = Recipe::meal('Pasta', [
-            new Need($pasta, Quantity::ofTwelfths(24)),
-            new Need($tomatoes, Quantity::ofTwelfths(24)),
-            new Need($cheese, null),
-        ], new \DateTimeImmutable());
-
-        self::assertSame(['Pasta', 'Cheese'], array_map(static fn (RecipeLine $line): string => $line->ingredient()->name(), $recipe->missing()));
-        self::assertFalse($recipe->isMakeable());
-    }
-
-    public function testAManualIngredientAndASomeOnlyNeedAnyStock(): void
-    {
-        $oil = self::ingredient('Oil', 1, manual: true);
-        $salt = self::ingredient('Salt', 1);
-        $recipe = Recipe::meal('Dressing', [new Need($oil, Quantity::ofTwelfths(36)), new Need($salt, null)], new \DateTimeImmutable());
-
-        self::assertSame([], $recipe->missing());
-        self::assertTrue($recipe->isMakeable());
-    }
-
-    public function testHavingTheIngredientsOfAPrepDoesNotMakeItsDishesMakeable(): void
-    {
-        $gluten = self::ingredient('Gluten', 36);
-        $seitan = self::ingredient('Seitan', 0, Unit::Bag);
-        Recipe::prep('Seitan', [new Need($gluten, Quantity::ofTwelfths(12))], $seitan, Quantity::ofTwelfths(12), new \DateTimeImmutable());
-        $stew = Recipe::meal('Stew', [new Need($seitan, Quantity::ofTwelfths(12))], new \DateTimeImmutable());
-
-        self::assertFalse($stew->isMakeable());
-    }
-
     public function testRewriteReplacesTheNameAndKeepsTheLinesItDoesNotDrop(): void
     {
         $pasta = self::ingredient('Pasta', 24);

@@ -7,11 +7,14 @@ namespace App\Application\Pantry;
 use App\Domain\Cooking\RecipeRepository;
 use App\Domain\Groceries\Suggestion;
 use App\Domain\Pantry\Ingredient;
+use Psr\Clock\ClockInterface;
 
 final readonly class IngredientViews
 {
-    public function __construct(private RecipeRepository $recipes)
-    {
+    public function __construct(
+        private RecipeRepository $recipes,
+        private ClockInterface $clock,
+    ) {
     }
 
     public function of(Ingredient $ingredient): IngredientView
@@ -33,6 +36,6 @@ final readonly class IngredientViews
 
     private function suggestion(): Suggestion
     {
-        return new Suggestion($this->recipes->outputIds());
+        return new Suggestion($this->recipes->outputIds(), (int) $this->clock->now()->format('n'));
     }
 }

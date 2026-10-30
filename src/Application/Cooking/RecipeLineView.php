@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Application\Cooking;
 
+use App\Domain\Cooking\Plan;
 use App\Domain\Cooking\RecipeLine;
 
 final readonly class RecipeLineView
@@ -16,12 +17,14 @@ final readonly class RecipeLineView
         public ?int $amount,
         public int $stock,
         public bool $covered,
+        public ?VariantView $variant,
     ) {
     }
 
-    public static function of(RecipeLine $line): self
+    public static function of(RecipeLine $line, Plan $plan): self
     {
         $ingredient = $line->ingredient();
+        $used = $plan->uses($line);
 
         return new self(
             (string) $ingredient->id(),
@@ -30,7 +33,8 @@ final readonly class RecipeLineView
             $ingredient->isManual(),
             $line->amount()?->twelfths(),
             $ingredient->stock()->twelfths(),
-            $line->isCovered(),
+            $plan->covers($line),
+            null === $used || $used === $ingredient ? null : VariantView::of($used),
         );
     }
 }

@@ -74,7 +74,7 @@ function setStock(row) {
             </ul>
         </PageSection>
 
-        <IngredientSheet v-model:open="ingredientSheet.open" :ingredient="ingredientSheet.ingredient" :initial-name="ingredientSheet.name" :initial-location="place === 'all' ? 'pantry' : place" />
+        <IngredientSheet v-model:open="ingredientSheet.open" :ingredient="ingredientSheet.ingredient" :initial-name="ingredientSheet.name" :initial-location="place === 'all' ? 'pantry' : place" :ingredients="ingredients" />
         <StockSheet v-model:open="stockSheet.open" :ingredient="stockSheet.ingredient" />
     </div>
 </template>

@@ -10,7 +10,8 @@
     },
     "status": {
         "ready": "Réalisable",
-        "missing": "Manque {count} ingrédient | Manque {count} ingrédients"
+        "missing": "Manque {count} ingrédient | Manque {count} ingrédients",
+        "prepFirst": "D’abord : {names}"
     },
     "card": {
         "more": "+{count}"
@@ -30,7 +31,9 @@
         "notFound": {
             "title": "Cette recette a disparu",
             "hint": "Elle a peut-être été supprimée depuis un autre téléphone."
-        }
+        },
+        "variant": "Avec {name}",
+        "prepFirst": "Faites d’abord {names}, et tout sera là."
     },
     "edit": {
         "titleNew": "Nouvelle recette",

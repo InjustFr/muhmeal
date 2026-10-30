@@ -3,6 +3,7 @@ import { computed, nextTick, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useApi } from '../../composables/useApi.js';
 import { useToast } from '../../composables/useToast.js';
+import { intlLocale } from '../../i18n/locale.js';
 import { LOCATION_ICONS, LOCATIONS, UNITS } from '../../pantry/locations.js';
 import { defaultLowAt, MAX_TWELFTHS, TWELFTHS_PER_UNIT } from '../../pantry/quantity.js';
 import BaseButton from '../ui/BaseButton.vue';
@@ -21,6 +22,7 @@ const props = defineProps({
     initialLocation: { type: String, default: 'pantry' },
     initialStock: { type: Number, default: TWELFTHS_PER_UNIT },
     allowAnother: { type: Boolean, default: true },
+    ingredients: { type: Array, default: () => [] },
 });
 const open = defineModel('open', { type: Boolean, required: true });
 const emit = defineEmits(['saved']);
@@ -34,6 +36,9 @@ const location = ref('pantry');
 const unit = ref('piece');
 const manual = ref(false);
 const lowAt = ref(defaultLowAt('piece'));
+const ALL_MONTHS = Array.from({ length: 12 }, (_, index) => index + 1);
+const months = ref(ALL_MONTHS);
+const variantOf = ref(null);
 const whole = ref(props.initialStock);
 const fraction = ref(0);
 const nameError = ref(null);
@@ -45,12 +50,21 @@ const capitalize = (text) => text.charAt(0).toLocaleUpperCase() + text.slice(1);
 const locationOptions = computed(() => LOCATIONS.map((value) => ({ value, label: t(`pantry.location.${value}`), icon: LOCATION_ICONS[value] })));
 const unitOptions = computed(() => UNITS.map((value) => ({ value, label: capitalize(t(`units.${value}.one`)) })));
 const lowAtStep = computed(() => defaultLowAt(unit.value));
+const monthOptions = computed(() => {
+    const format = new Intl.DateTimeFormat(intlLocale(), { month: 'short', timeZone: 'UTC' });
+    return ALL_MONTHS.map((value) => ({ value, label: format.format(Date.UTC(2026, value - 1, 1)) }));
+});
+const hasVariants = computed(() => editing.value && props.ingredient.variantOf === null && props.ingredients.some((candidate) => candidate.variantOf === props.ingredient.id));
+const variantOptions = computed(() => [
+    { value: null, label: t('pantry.sheet.noVariant') },
+    ...props.ingredients.filter((candidate) => candidate.variantOf === null && candidate.id !== props.ingredient?.id).map((candidate) => ({ value: candidate.id, label: candidate.name })),
+]);
 
 watch(open, (isOpen) => {
     if (!isOpen) return;
     nameError.value = null;
     if (props.ingredient) {
-        ({ name: name.value, location: location.value, unit: unit.value, manual: manual.value, lowAt: lowAt.value } = props.ingredient);
+        ({ name: name.value, location: location.value, unit: unit.value, manual: manual.value, lowAt: lowAt.value, months: months.value, variantOf: variantOf.value } = props.ingredient);
         return;
     }
     name.value = props.initialName;
@@ -58,6 +72,8 @@ watch(open, (isOpen) => {
     unit.value = 'piece';
     manual.value = false;
     lowAt.value = defaultLowAt('piece');
+    months.value = ALL_MONTHS;
+    variantOf.value = null;
     resetStock();
 });
 
@@ -81,7 +97,7 @@ function focusName(event) {
 async function save(another) {
     saving.value = true;
     nameError.value = null;
-    const body = { name: name.value, location: location.value, unit: unit.value, manual: manual.value, lowAt: lowAt.value, ...(editing.value ? {} : { stock: whole.value + fraction.value }) };
+    const body = { name: name.value, location: location.value, unit: unit.value, manual: manual.value, lowAt: lowAt.value, months: months.value, variantOf: variantOf.value, ...(editing.value ? {} : { stock: whole.value + fraction.value }) };
     try {
         if (editing.value) {
             emit('saved', await api.put(`/api/ingredients/${props.ingredient.id}`, body));
@@ -93,6 +109,8 @@ async function save(another) {
             name.value = '';
             manual.value = false;
             lowAt.value = defaultLowAt(unit.value);
+            months.value = ALL_MONTHS;
+            variantOf.value = null;
             resetStock();
             await nextTick();
             nameInput.value?.focus();
@@ -139,6 +157,16 @@ async function remove() {
             <FormField :label="t('pantry.sheet.lowAt')" as="div">
                 <QuantityStepper v-model="lowAt" :label="t('pantry.sheet.lowAt')" :decrease-label="t('pantry.sheet.less')" :increase-label="t('pantry.sheet.more')" :step="lowAtStep" :max="MAX_TWELFTHS" />
             </FormField>
+            <FormField :label="t('pantry.sheet.months')" :hint="t('pantry.sheet.monthsHint')" as="div">
+                <ChipGroup v-model="months" multiple allow-none :options="monthOptions" :label="t('pantry.sheet.months')" data-test="months" />
+                <div class="ingredient-sheet__months">
+                    <BaseButton variant="ghost" :disabled="months.length === 12" @click="months = ALL_MONTHS">{{ t('pantry.sheet.allYear') }}</BaseButton>
+                    <BaseButton variant="ghost" :disabled="months.length === 0" data-test="never" @click="months = []">{{ t('pantry.sheet.never') }}</BaseButton>
+                </div>
+            </FormField>
+            <FormField v-if="ingredients.length > 0 && !hasVariants" :label="t('pantry.sheet.variantOf')" :hint="t('pantry.sheet.variantOfHint')">
+                <BaseSelect v-model="variantOf" :options="variantOptions" data-test="variant-of" />
+            </FormField>
         </form>
         <template #footer>
             <span v-if="editing" class="ingredient-sheet__delete">
@@ -152,5 +180,6 @@ async function remove() {
 
 <style scoped>
 .ingredient-sheet { display: flex; flex-direction: column; gap: var(--space-4); }
+.ingredient-sheet__months { display: flex; flex-wrap: wrap; gap: var(--space-2); margin-top: var(--space-2); }
 .ingredient-sheet__delete { margin-right: auto; }
 </style>

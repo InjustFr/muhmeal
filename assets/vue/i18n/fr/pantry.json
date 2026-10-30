@@ -67,7 +67,14 @@
         "added": "{name} ajouté",
         "delete": "Supprimer",
         "deleteTitle": "Supprimer {name} ?",
-        "deleteMessage": "L’ingrédient et son stock sont supprimés. Cette action est définitive."
+        "deleteMessage": "L’ingrédient et son stock sont supprimés. Cette action est définitive.",
+        "months": "À acheter en",
+        "monthsHint": "Proposé pour les courses seulement pendant ces mois. Aucun mois : jamais.",
+        "allYear": "Toute l’année",
+        "never": "Jamais",
+        "variantOf": "Variante de",
+        "variantOfHint": "Une variante peut remplacer son ingrédient principal dans toutes les recettes (courgettes surgelées pour courgettes).",
+        "noVariant": "Aucun, c’est un ingrédient à part"
     },
     "groceries": "Faire les courses"
 }

@@ -10,6 +10,9 @@ use Symfony\Component\Uid\Ulid;
 
 final readonly class EditIngredient
 {
+    /**
+     * @param list<int> $months
+     */
     public function __construct(
         public Ulid $id,
         public string $name,
@@ -17,6 +20,8 @@ final readonly class EditIngredient
         public Unit $unit,
         public bool $manual,
         public ?int $lowAt = null,
+        public array $months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+        public ?Ulid $variantOf = null,
     ) {
     }
 }

@@ -38,6 +38,17 @@ describe('linesFromRecipe', () => {
     it('starts the hand-tracked and the amount-less lines at zero', () => {
         expect(linesFromRecipe(recipe).map((line) => line.amount)).toEqual([12, 0, 0, 0]);
     });
+
+    it('uses the variant that stands in, at the recipe amount when it shares the unit', () => {
+        const fresh = { ingredientId: 'z', name: 'Zucchini', unit: 'piece', manual: false, amount: 24, stock: 0, covered: true };
+        const sameUnit = { ...fresh, variant: { ingredientId: 'y', name: 'Yellow zucchini', unit: 'piece', manual: false, stock: 36 } };
+        const otherUnit = { ...fresh, variant: { ingredientId: 'f', name: 'Frozen zucchini', unit: 'bag', manual: false, stock: 6 } };
+
+        expect(linesFromRecipe({ lines: [sameUnit, otherUnit] })).toEqual([
+            { ingredientId: 'y', name: 'Yellow zucchini', unit: 'piece', manual: false, stock: 36, amount: 24 },
+            { ingredientId: 'f', name: 'Frozen zucchini', unit: 'bag', manual: false, stock: 6, amount: 0 },
+        ]);
+    });
 });
 
 describe('withIngredient', () => {

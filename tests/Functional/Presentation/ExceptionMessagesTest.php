@@ -24,7 +24,10 @@ use App\Domain\Pantry\Exception\EmptyIngredientName;
 use App\Domain\Pantry\Exception\IngredientInUse;
 use App\Domain\Pantry\Exception\IngredientNameTaken;
 use App\Domain\Pantry\Exception\IngredientNameTooLong;
+use App\Domain\Pantry\Exception\InvalidMonth;
+use App\Domain\Pantry\Exception\NestedVariant;
 use App\Domain\Pantry\Exception\QuantityOutOfRange;
+use App\Domain\Pantry\Exception\VariantOfItself;
 use App\Domain\Shared\Exception\DomainException;
 use App\Domain\Shared\Exception\InvalidDay;
 use App\Domain\Shared\Exception\NotFound;
@@ -46,6 +49,9 @@ final class ExceptionMessagesTest extends KernelTestCase
     /** @return iterable<array{DomainException, string, string}> */
     public static function exceptions(): iterable
     {
+        yield 'invalid month' => [new InvalidMonth(13), '13 is not a month: a month goes from 1 to 12.', '13 n’est pas un mois : un mois va de 1 à 12.'];
+        yield 'variant of itself' => [new VariantOfItself('Zucchini'), '“Zucchini” cannot be a variant of itself.', '« Zucchini » ne peut pas être une variante de lui-même.'];
+        yield 'nested variant' => [new NestedVariant('Zucchini'), '“Zucchini” cannot be a variant: variants go one level deep, under a main ingredient.', '« Zucchini » ne peut pas être une variante : les variantes n’ont qu’un niveau, sous un ingrédient principal.'];
         yield 'invalid day' => [new InvalidDay('2026-02-30'), '“2026-02-30” is not a valid date.', '« 2026-02-30 » n’est pas une date valide.'];
         yield 'missing user' => [new NotFound('user', 'abc'), 'This person no longer exists.', 'Cette personne n’existe plus.'];
         yield 'missing ingredient' => [new NotFound('ingredient', 'abc'), 'This ingredient no longer exists.', 'Cet ingrédient n’existe plus.'];

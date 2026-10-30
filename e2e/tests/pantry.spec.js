@@ -167,6 +167,26 @@ test('an ingredient is renamed and moved to the freezer', async ({ page }) => {
     await expect(row(page, name)).toHaveCount(0);
 });
 
+test('an ingredient is made a variant of another and bought only in some months', async ({ page }) => {
+    const main = unique('Zucchini');
+    const variant = unique('Frozen zucchini');
+    await addIngredient(page, main);
+    await addIngredient(page, variant, { location: 'Freezer' });
+
+    await row(page, variant).getByRole('button', { name: `${variant} (edit)` }).click();
+    const sheet = page.getByRole('dialog', { name: 'Edit ingredient' });
+    await sheet.getByRole('combobox', { name: 'Variant of' }).click();
+    await page.getByRole('option', { name: main }).click();
+    await sheet.getByTestId('never').click();
+    await sheet.getByRole('button', { name: 'Jan' }).click();
+    await sheet.getByRole('button', { name: 'Save', exact: true }).click();
+    await expect(sheet).toBeHidden();
+
+    const saved = await page.evaluate(async (name) => (await (await fetch('/api/ingredients')).json()).find((item) => item.name === name), variant);
+    const mainId = await page.evaluate(async (name) => (await (await fetch('/api/ingredients')).json()).find((item) => item.name === name).id, main);
+    expect([saved.variantOf, saved.months]).toEqual([mainId, [1]]);
+});
+
 test('a name already taken is refused, ignoring case', async ({ page }) => {
     const name = unique('Basil');
     await addIngredient(page, name);

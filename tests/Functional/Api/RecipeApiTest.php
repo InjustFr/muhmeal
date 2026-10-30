@@ -69,6 +69,35 @@ final class RecipeApiTest extends WebTestCase
         self::assertSame([], Json::array(self::body($client), 'meals'));
     }
 
+    public function testADishWaitsForThePrepThatMakesWhatItLacks(): void
+    {
+        $client = self::signedInClient();
+        $flour = self::ingredient($client, 'Flour', 12, 'bag');
+        $dough = self::ingredient($client, 'Dough', 0);
+        $client->jsonRequest('POST', '/api/recipes', ['name' => 'Dough', 'lines' => [['ingredientId' => $flour, 'amount' => 6]], 'output' => ['ingredientId' => $dough, 'yield' => 12]]);
+        $prep = Json::string(self::body($client), 'id');
+
+        $client->jsonRequest('POST', '/api/recipes', ['name' => 'Tart', 'lines' => [['ingredientId' => $dough, 'amount' => 12]]]);
+        self::assertResponseStatusCodeSame(201);
+        $tart = self::body($client);
+
+        self::assertSame([false, [], [['id' => $prep, 'name' => 'Dough']], false], [$tart['makeable'], $tart['missing'], $tart['preps'], Json::at($tart, 'lines', 0, 'covered')]);
+    }
+
+    public function testAVariantInStockStandsInForTheLine(): void
+    {
+        $client = self::signedInClient();
+        $zucchini = self::ingredient($client, 'Zucchini', 0);
+        $client->jsonRequest('POST', '/api/ingredients', ['name' => 'Frozen zucchini', 'location' => 'freezer', 'unit' => 'bag', 'stock' => 6, 'variantOf' => $zucchini]);
+        $frozen = Json::string(self::body($client), 'id');
+
+        $client->jsonRequest('POST', '/api/recipes', ['name' => 'Gratin', 'lines' => [['ingredientId' => $zucchini, 'amount' => 24]]]);
+        $gratin = self::body($client);
+
+        self::assertTrue($gratin['makeable']);
+        self::assertSame(['ingredientId' => $frozen, 'name' => 'Frozen zucchini', 'unit' => 'bag', 'manual' => false, 'stock' => 6], Json::at($gratin, 'lines', 0, 'variant'));
+    }
+
     public function testAMealRecipeCannotBeMade(): void
     {
         $client = self::signedInClient();

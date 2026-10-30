@@ -14,5 +14,8 @@
     "logMeal": "Repas sans recette",
     "cookIt": "Cuisiner",
     "makeIt": "Préparer",
-    "low": "{count} ingrédient bientôt fini | {count} ingrédients bientôt finis"
+    "low": "{count} ingrédient bientôt fini | {count} ingrédients bientôt finis",
+    "later": "Prêt après une préparation",
+    "makeFirst": "Faire {name}",
+    "prepFirst": "Préparer"
 }

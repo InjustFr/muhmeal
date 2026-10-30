@@ -34,12 +34,13 @@ test('the demo recipes that can be cooked are on the Cook page, the others are n
     await expect(card(page, 'Pasta al pomodoro')).toBeVisible();
     await expect(card(page, 'Cheese omelette')).toBeVisible();
     await expect(card(page, 'Seitan')).toBeVisible();
-    await expect(card(page, 'Seitan stew')).toHaveCount(0);
+    await expect(card(page, 'Seitan stew')).toContainText('Make Seitan first');
+    await expect(page.getByRole('button', { name: 'Make the prep: Seitan stew' })).toBeVisible();
     await expect(card(page, 'Berry yoghurt bowl')).toHaveCount(0);
     await expect(page.getByTestId('running-low')).toContainText('running low');
 
     await goTo(page, 'Recipes');
-    await expect(card(page, 'Seitan stew')).toContainText('Missing 1');
+    await expect(card(page, 'Seitan stew')).toContainText('Make Seitan first');
     await expect(card(page, 'Pasta al pomodoro')).toContainText('Can cook');
     await expect(card(page, 'Berry yoghurt bowl')).toContainText('Missing 1');
 });
@@ -132,7 +133,7 @@ test('deleting a meal can leave the stock alone', async ({ page }) => {
     expect(await stockOf(page, rice)).toBe(24);
 });
 
-test('a prep is made, the output stock goes up and the dish that needs it becomes makeable', async ({ page }) => {
+test('a dish waits for its prep, which is made from its card, then the dish is ready to cook', async ({ page }) => {
     const gluten = unique('Vital gluten');
     const seitan = unique('Homemade seitan');
     const prep = unique('Seitan batch');
@@ -144,9 +145,10 @@ test('a prep is made, the output stock goes up and the dish that needs it become
 
     await page.goto('/');
     await expect(card(page, prep)).toBeVisible();
-    await expect(card(page, dish)).toHaveCount(0);
+    await expect(card(page, dish)).toContainText(`Make ${prep} first`);
+    await expect(page.getByRole('button', { name: `Cook it: ${dish}` })).toHaveCount(0);
 
-    await page.getByRole('button', { name: `Make it: ${prep}` }).click();
+    await page.getByRole('button', { name: `Make the prep: ${dish}` }).click();
     const sheet = page.getByRole('dialog', { name: `Make ${prep}` });
     await expect(sheet.getByTestId('prep-preview')).toHaveText('0 → 1 bag');
     await expect(sheet.getByTestId('used-line').filter({ hasText: gluten }).getByTestId('used-preview')).toHaveText('2 → 1 bag');
@@ -156,11 +158,46 @@ test('a prep is made, the output stock goes up and the dish that needs it become
     await expect(sheet.getByTestId('stock-tick').filter({ hasText: gluten })).toContainText('1 bag');
     await sheet.getByRole('button', { name: 'Done' }).click();
 
-    await expect(card(page, dish)).toBeVisible();
+    await expect(page.getByRole('button', { name: `Cook it: ${dish}` })).toBeVisible();
     expect(await stockOf(page, seitan)).toBe(12);
     expect(await stockOf(page, gluten)).toBe(12);
     const history = await api(page, 'GET', '/api/meals');
     expect(history.meals.filter((meal) => meal.title === prep)).toHaveLength(0);
+});
+
+test('a dish needing a prep of a prep says so on its page', async ({ page }) => {
+    const flour = unique('Rye flour');
+    const starter = unique('Rye starter');
+    const dough = unique('Rye dough');
+    const bread = unique('Rye bread');
+    const flourItem = await ingredient(page, flour, { unit: 'bag', stock: 24 });
+    const starterItem = await ingredient(page, starter, { unit: 'jar', stock: 0 });
+    const doughItem = await ingredient(page, dough, { stock: 0 });
+    await recipe(page, unique('Feed starter'), [[flourItem, 3]], [starterItem, 12]);
+    await recipe(page, unique('Knead dough'), [[flourItem, 12], [starterItem, 3]], [doughItem, 12]);
+    const breadRecipe = await recipe(page, bread, [[doughItem, 12]]);
+
+    await page.goto(`/recipes/${breadRecipe.id}`);
+
+    await expect(page.getByTestId('prep-first-note')).toContainText('Feed starter');
+    await expect(page.getByTestId('prep-first-note')).toContainText('Knead dough');
+    await expect(page.getByTestId('short-note')).toHaveCount(0);
+});
+
+test('a variant in stock stands in for the ingredient a recipe needs', async ({ page }) => {
+    const fresh = unique('Fresh zucchini');
+    const frozen = unique('Frozen zucchini');
+    const dish = unique('Zucchini gratin');
+    const freshItem = await ingredient(page, fresh, { stock: 0 });
+    await api(page, 'POST', '/api/ingredients', { name: frozen, location: 'freezer', unit: 'bag', stock: 6, variantOf: freshItem.id });
+    await recipe(page, dish, [[freshItem, 24]]);
+
+    await page.goto('/');
+    await page.getByRole('button', { name: `Cook it: ${dish}` }).click();
+
+    const sheet = page.getByRole('dialog', { name: `Cook ${dish}` });
+    await expect(sheet.getByTestId('used-line')).toHaveCount(1);
+    await expect(sheet.getByTestId('used-line').filter({ hasText: frozen }).getByTestId('used-note')).toBeVisible();
 });
 
 test('a free meal is logged from the Cook page with a new ingredient created on the spot', async ({ page }) => {

@@ -6,6 +6,7 @@ namespace App\Application\Cooking\MakePrep;
 
 use App\Application\Cooking\CookingIngredients;
 use App\Application\Cooking\RecipeView;
+use App\Application\Cooking\RecipeViews;
 use App\Application\Transaction;
 use App\Domain\Cooking\RecipeRepository;
 use App\Domain\Pantry\Quantity;
@@ -15,6 +16,7 @@ final readonly class MakePrepHandler
     public function __construct(
         private RecipeRepository $recipes,
         private CookingIngredients $cooking,
+        private RecipeViews $views,
         private Transaction $transaction,
     ) {
     }
@@ -25,6 +27,6 @@ final readonly class MakePrepHandler
         $recipe->make($this->cooking->portions($command->used), Quantity::ofTwelfths($command->made));
         $this->transaction->commit();
 
-        return RecipeView::of($recipe);
+        return $this->views->of($recipe);
     }
 }

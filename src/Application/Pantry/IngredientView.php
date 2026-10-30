@@ -9,6 +9,9 @@ use App\Domain\Pantry\Ingredient;
 
 final readonly class IngredientView
 {
+    /**
+     * @param list<int> $months
+     */
     private function __construct(
         public string $id,
         public string $name,
@@ -21,6 +24,8 @@ final readonly class IngredientView
         public bool $out,
         public bool $homemade,
         public bool $suggested,
+        public array $months,
+        public ?string $variantOf,
     ) {
     }
 
@@ -38,6 +43,8 @@ final readonly class IngredientView
             $ingredient->isOut(),
             $suggestion->isHomemade($ingredient),
             $suggestion->suggests($ingredient),
+            $ingredient->months()->toList(),
+            null === $ingredient->variantOf() ? null : (string) $ingredient->variantOf()->id(),
         );
     }
 }

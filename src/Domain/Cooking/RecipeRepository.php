@@ -26,4 +26,9 @@ interface RecipeRepository
      * @return list<Ulid>
      */
     public function outputIds(): array;
+
+    /**
+     * @return list<Recipe>
+     */
+    public function preps(): array;
 }

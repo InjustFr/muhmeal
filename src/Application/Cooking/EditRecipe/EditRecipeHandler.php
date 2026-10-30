@@ -6,6 +6,7 @@ namespace App\Application\Cooking\EditRecipe;
 
 use App\Application\Cooking\CookingIngredients;
 use App\Application\Cooking\RecipeView;
+use App\Application\Cooking\RecipeViews;
 use App\Application\Transaction;
 use App\Domain\Cooking\Exception\RecipeNameTaken;
 use App\Domain\Cooking\RecipeRepository;
@@ -19,6 +20,7 @@ final readonly class EditRecipeHandler
         private RecipeRepository $recipes,
         private IngredientRepository $ingredients,
         private CookingIngredients $cooking,
+        private RecipeViews $views,
         private Transaction $transaction,
     ) {
     }
@@ -38,6 +40,6 @@ final readonly class EditRecipeHandler
         );
         $this->transaction->commit();
 
-        return RecipeView::of($recipe);
+        return $this->views->of($recipe);
     }
 }
