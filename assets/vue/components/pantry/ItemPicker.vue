@@ -6,6 +6,7 @@ import { useApi } from '../../composables/useApi.js';
 import { currentLanguage } from '../../i18n/locale.js';
 import { LOCATION_ICONS } from '../../pantry/locations.js';
 import { describeQuantity } from '../../pantry/quantity.js';
+import { nameMatches } from '../../pantry/search.js';
 import BaseButton from '../ui/BaseButton.vue';
 import ItemSheet from './ItemSheet.vue';
 
@@ -31,7 +32,7 @@ const sheet = ref({ open: false, name: '' });
 const words = computed(() => (props.ingredientsOnly ? 'pantry.picker.ingredients' : 'pantry.picker.items'));
 const needle = computed(() => query.value.trim().toLowerCase());
 const candidates = computed(() => items.value.filter((item) => !props.exclude.includes(item.id) && !(props.ingredientsOnly && item.kind === 'household')));
-const matches = computed(() => candidates.value.filter((item) => item.name.toLowerCase().includes(needle.value)));
+const matches = computed(() => candidates.value.filter((item) => nameMatches(item.name, needle.value)));
 const canCreate = computed(() => needle.value !== '' && !items.value.some((item) => item.name.toLowerCase() === needle.value));
 
 async function expand() {

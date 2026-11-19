@@ -14,6 +14,7 @@ import PageSection from '../components/ui/PageSection.vue';
 import { useApi } from '../composables/useApi.js';
 import { useStockAdjustments } from '../composables/useStockAdjustments.js';
 import { INGREDIENT_LOCATIONS, KIND_ICONS, KINDS, LOCATION_ICONS } from '../pantry/locations.js';
+import { nameMatches } from '../pantry/search.js';
 
 const { t } = useI18n();
 const api = useApi();
@@ -34,7 +35,7 @@ const rows = computed(() => items.value.map(adjustments.view));
 const runningLow = computed(() => items.value.filter((item) => item.suggested).length);
 const needle = computed(() => query.value.trim().toLowerCase());
 const shown = (row) => row.kind === kind.value && (kind.value === 'household' || place.value === 'all' || row.location === place.value);
-const matches = computed(() => rows.value.filter((row) => (needle.value ? row.name.toLowerCase().includes(needle.value) : shown(row))));
+const matches = computed(() => rows.value.filter((row) => (needle.value ? nameMatches(row.name, needle.value) : shown(row))));
 const canAdd = computed(() => needle.value !== '' && !rows.value.some((row) => row.name.toLowerCase() === needle.value));
 const inStockFirst = (list) => [...list.filter((row) => !row.out), ...list.filter((row) => row.out)];
 const groups = computed(() => {
