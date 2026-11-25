@@ -36,6 +36,8 @@ make e2e             # Playwright (desktop + Pixel 7) against php-e2e (APP_ENV=t
 make qa              # everything above, the gate before a commit
 ```
 
+Shared make targets (`common.mk`, `android.mk`), CI and the deptrac/PHPUnit configs are synced from `~/Sites/mossyleaf-studio/toolchain`: change them there and run its `./sync`, never edit the copies here.
+
 ## Backend architecture (Onion) — `src/`
 
 | Layer | Contains | May depend on |
@@ -61,7 +63,7 @@ Contexts: `Identity`, `Stock` (the `Item`s the kitchen keeps, each of a `Kind`: 
 - **Security headers** (`Presentation\Web\SecurityHeaders`, main requests only): a strict CSP (`default-src 'self'`, no inline script or style, no external host, `form-action` allows the accounts origin), HSTS over HTTPS, `nosniff`, `Referrer-Policy: same-origin`, `Permissions-Policy`, COOP/CORP `same-origin`, `X-Frame-Options: DENY`, `X-Robots-Tag: noindex, nofollow, noarchive`. The CSP is not sent in `dev` (Vite injects inline code). So the front end has **no inline `<script>` other than `type="application/json"` data blocks, no `style="…"` in markup or Twig, no `eval`/`new Function`, no external host**: Vue `:style` bindings (CSSOM) are fine, and Vite must not inline assets as `data:` fonts.
 - **Not discoverable**: `public/robots.txt` disallows everything, `<meta name="robots" content="noindex, nofollow">` in `templates/base.html.twig`.
 - **Rate limit**: `LoginRateLimit` limits `/login` and `/login/check` per address (`LOGIN_RATE_LIMIT`, 30 per 15 minutes) and answers 429. The e2e stack raises it.
-- **Supply chain**: `make audit` runs `composer audit` and `npm audit --omit=dev --audit-level=high` in `make qa` and CI; `.github/dependabot.yml` bumps composer, npm (root and `e2e`), Docker, GitHub Actions and Gradle weekly.
+- **Supply chain**: `make audit` runs `composer audit` and `npm audit --omit=dev --audit-level=high` in `make qa` and CI; `.github/dependabot.yml` bumps composer, npm (root and `e2e`), Docker and Gradle weekly (GitHub Action versions are bumped in `~/Sites/mossyleaf-studio/toolchain`, which syncs `common.mk`, `android.mk` and CI to every app).
 
 ## Frontend — `assets/`
 
