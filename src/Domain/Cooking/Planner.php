@@ -78,26 +78,39 @@ final readonly class Planner
 
         foreach ($family as $candidate) {
             foreach ($this->preps as $prep) {
-                if ($prep->output() !== $candidate || isset($visiting[(string) $prep->id()])) {
-                    continue;
-                }
-                $trialStock = $stock;
-                $trialPreps = $preps;
-                while (!$this->covers($wanted, $candidate, $amount, $trialStock)) {
-                    $before = $this->stockOf($candidate, $trialStock);
-                    if (!$this->make($prep, $trialStock, $trialPreps, $visiting) || $this->stockOf($candidate, $trialStock) <= $before) {
-                        continue 2;
-                    }
-                }
-                $stock = $trialStock;
-                $preps = $trialPreps;
-                $this->consume($wanted, $candidate, $amount, $stock);
+                if ($prep->output() === $candidate && !isset($visiting[(string) $prep->id()])
+                    && $this->makeEnough($prep, $wanted, $candidate, $amount, $stock, $preps, $visiting)) {
+                    $this->consume($wanted, $candidate, $amount, $stock);
 
-                return $candidate;
+                    return $candidate;
+                }
             }
         }
 
         return null;
+    }
+
+    /**
+     * Makes $prep until the stock covers $amount of $candidate; keeps the new stock and preps only when it gets there.
+     *
+     * @param array<string, int>  $stock
+     * @param list<Recipe>        $preps
+     * @param array<string, true> $visiting
+     */
+    private function makeEnough(Recipe $prep, Item $wanted, Item $candidate, ?Quantity $amount, array &$stock, array &$preps, array $visiting): bool
+    {
+        $trialStock = $stock;
+        $trialPreps = $preps;
+        while (!$this->covers($wanted, $candidate, $amount, $trialStock)) {
+            $before = $this->stockOf($candidate, $trialStock);
+            if (!$this->make($prep, $trialStock, $trialPreps, $visiting) || $this->stockOf($candidate, $trialStock) <= $before) {
+                return false;
+            }
+        }
+        $stock = $trialStock;
+        $preps = $trialPreps;
+
+        return true;
     }
 
     /**
